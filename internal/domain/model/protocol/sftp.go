@@ -2,12 +2,12 @@ package protocol
 
 // SFTPConnection represents an SFTP connection
 type SFTPConnection struct {
-	Host           string
-	Port           int
-	Username       string
-	Password       string
-	PrivateKeyPath string
-	KeyPassphrase  string
+	Host          string
+	Port          int
+	Username      string
+	Password      string
+	PrivateKey    string
+	KeyPassphrase string
 }
 
 // Validate performs validation on the SFTP connection
@@ -21,7 +21,7 @@ func (c *SFTPConnection) Validate() error {
 	if c.Username == "" {
 		return ErrEmptyUsername
 	}
-	if c.Password == "" && c.PrivateKeyPath == "" {
+	if c.Password == "" && c.PrivateKey == "" {
 		return ErrEmptyCredentials
 	}
 	return nil
