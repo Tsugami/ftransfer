@@ -1,0 +1,358 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-03-19T12:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "wrk_ftransfer",
+      "parentId": null,
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "name": "FTransfer API",
+      "description": "API collection for FTransfer service",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_base",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8080"
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url"]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": -1710849600000,
+      "_type": "environment"
+    },
+    {
+      "_id": "req_connectors_list",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "url": "{{ _.base_url }}/api/v1/connectors",
+      "method": "GET",
+      "name": "List Connectors",
+      "description": "Get a list of all connectors",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710849600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_connectors_create",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "url": "{{ _.base_url }}/api/v1/connectors",
+      "method": "POST",
+      "name": "Create Connector",
+      "description": "Create a new connector",
+      "body": {
+        "mimeType": "application/json",
+        "text": {
+          "name": "My Connector",
+          "description": "A test connector",
+          "type": "s3",
+          "config": {
+            "bucket": "my-bucket",
+            "region": "us-east-1",
+            "access_key": "AKIAXXXXXXXXXXXXXXXX",
+            "secret_key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          },
+          "tags": [
+            {
+              "name": "environment",
+              "value": "production"
+            },
+            {
+              "name": "project",
+              "value": "test"
+            }
+          ]
+        }
+      },
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710849600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_connectors_get",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "url": "{{ _.base_url }}/api/v1/connectors/:id",
+      "method": "GET",
+      "name": "Get Connector",
+      "description": "Get a specific connector by ID",
+      "body": {},
+      "parameters": [
+        {
+          "name": "id",
+          "value": "connector-id",
+          "description": "Connector ID",
+          "type": "text"
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710849600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_connectors_delete",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "url": "{{ _.base_url }}/api/v1/connectors/:id",
+      "method": "DELETE",
+      "name": "Delete Connector",
+      "description": "Delete a specific connector by ID",
+      "body": {},
+      "parameters": [
+        {
+          "name": "id",
+          "value": "connector-id",
+          "description": "Connector ID",
+          "type": "text"
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710849600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_folders_create",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "url": "{{ _.base_url }}/api/v1/folders",
+      "method": "POST",
+      "name": "Create Folder",
+      "description": "Create a new folder",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"connector_id\": \"connector-id\",\n  \"directory_path\": \"/path/to/folder\",\n  \"tags\": [\"backup\", \"daily\"]\n}"
+      },
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710849600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_folders_get",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "url": "{{ _.base_url }}/api/v1/folders/:id",
+      "method": "GET",
+      "name": "Get Folder",
+      "description": "Get a specific folder by ID",
+      "body": {},
+      "parameters": [
+        {
+          "name": "id",
+          "value": "folder-id",
+          "description": "Folder ID",
+          "type": "text"
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710849600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_folders_delete",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "url": "{{ _.base_url }}/api/v1/folders/:id",
+      "method": "DELETE",
+      "name": "Delete Folder",
+      "description": "Delete a specific folder by ID",
+      "body": {},
+      "parameters": [
+        {
+          "name": "id",
+          "value": "folder-id",
+          "description": "Folder ID",
+          "type": "text"
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710849600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_transfers_create",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "url": "{{ _.base_url }}/api/v1/transfers",
+      "method": "POST",
+      "name": "Create Transfer",
+      "description": "Create a new transfer",
+      "body": {
+        "mimeType": "application/json",
+        "text": {
+          "name": "My Transfer",
+          "description": "A test transfer",
+          "source_connector_id": "{{ _.connector_id }}",
+          "destination_connector_id": "{{ _.connector_id }}",
+          "source_path": "/source/path",
+          "destination_path": "/destination/path",
+          "schedule": {
+            "type": "daily",
+            "time": "10:00",
+            "timezone": "UTC"
+          },
+          "tags": [
+            {
+              "name": "environment",
+              "value": "production"
+            },
+            {
+              "name": "project",
+              "value": "test"
+            }
+          ]
+        }
+      },
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710849600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_transfers_get",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "url": "{{ _.base_url }}/api/v1/transfers/:id",
+      "method": "GET",
+      "name": "Get Transfer",
+      "description": "Get a specific transfer by ID",
+      "body": {},
+      "parameters": [
+        {
+          "name": "id",
+          "value": "transfer-id",
+          "description": "Transfer ID",
+          "type": "text"
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710849600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_transfers_delete",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "url": "{{ _.base_url }}/api/v1/transfers/:id",
+      "method": "DELETE",
+      "name": "Delete Transfer",
+      "description": "Delete a specific transfer by ID",
+      "body": {},
+      "parameters": [
+        {
+          "name": "id",
+          "value": "transfer-id",
+          "description": "Transfer ID",
+          "type": "text"
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710849600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    }
+  ]
+} 

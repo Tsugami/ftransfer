@@ -35,4 +35,13 @@ var (
 
 	// ErrEmptyPostTransferPath is returned when post-transfer path is empty
 	ErrEmptyPostTransferPath = errors.New("post-transfer path cannot be empty")
+
+	ErrTransferNotFound         = errors.New("transfer not found")
+	ErrFolderNotFound           = errors.New("folder not found")
+	ErrConnectorNotFound        = errors.New("connector not found")
+	ErrInvalidConnection        = errors.New("invalid connection configuration")
+	ErrInvalidPath              = errors.New("invalid path")
+	ErrInvalidMatch             = errors.New("invalid match pattern")
+	ErrInvalidSourceFolder      = errors.New("invalid source folder")
+	ErrInvalidDestinationFolder = errors.New("invalid destination folder")
 )
