@@ -5,7 +5,7 @@ import (
 	"github.com/Tsugami/ftransfer/internal/domain/model/protocol"
 )
 
-type ConnectorResponse struct {
+type StorageProviderResponse struct {
 	ID                 string                 `json:"id"`
 	Name               string                 `json:"name"`
 	Description        string                 `json:"description"`
@@ -17,10 +17,10 @@ type ConnectorResponse struct {
 	UpdatedAt          string                 `json:"updated_at"`
 }
 
-func NewConnectorResponse(connector *model.Connector) *ConnectorResponse {
+func NewStorageProviderResponse(storageProvider *model.StorageProvider) *StorageProviderResponse {
 	// Convert protocol.Connection to map[string]interface{}
 	protocolConnMap := make(map[string]interface{})
-	switch conn := connector.ProtocolConnection.(type) {
+	switch conn := storageProvider.ProtocolConnection.(type) {
 	case *protocol.SFTPConnection:
 		protocolConnMap["host"] = conn.Host
 		protocolConnMap["port"] = conn.Port
@@ -41,23 +41,21 @@ func NewConnectorResponse(connector *model.Connector) *ConnectorResponse {
 	}
 
 	// Convert model.Tags to TagsResponse
-	tags := make(TagsResponse, len(connector.Tags))
-	for i, tag := range connector.Tags {
+	tags := make(TagsResponse, len(storageProvider.Tags))
+	for i, tag := range storageProvider.Tags {
 		tags[i] = TagResponse{
 			Name:  tag.Name,
 			Value: tag.Value,
 		}
 	}
 
-	return &ConnectorResponse{
-		ID:                 connector.ID,
-		Name:               connector.Name,
-		Description:        connector.Description,
-		Protocol:           string(connector.Protocol),
-		FileSystem:         string(connector.FileSystem),
+	return &StorageProviderResponse{
+		ID:                 storageProvider.ID,
+		Name:               storageProvider.Name,
+		FileSystem:         string(storageProvider.FileSystem),
 		ProtocolConnection: protocolConnMap,
 		Tags:               tags,
-		CreatedAt:          connector.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
-		UpdatedAt:          connector.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"),
+		CreatedAt:          storageProvider.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
+		UpdatedAt:          storageProvider.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"),
 	}
 }

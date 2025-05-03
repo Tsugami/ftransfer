@@ -1,5 +1,7 @@
 package protocol
 
+import "github.com/Tsugami/ftransfer/internal/domain/errs"
+
 // FTPConnection represents an FTP connection
 type FTPConnection struct {
 	Host        string
@@ -12,16 +14,16 @@ type FTPConnection struct {
 // Validate performs validation on the FTP connection
 func (c *FTPConnection) Validate() error {
 	if c.Host == "" {
-		return ErrEmptyHost
+		return errs.ErrEmptyHost
 	}
 	if c.Port == 0 {
-		return ErrEmptyPort
+		return errs.ErrEmptyPort
 	}
 	if c.Username == "" {
-		return ErrEmptyUsername
+		return errs.ErrEmptyUsername
 	}
 	if c.Password == "" {
-		return ErrEmptyPassword
+		return errs.ErrEmptyPassword
 	}
 	return nil
 }
@@ -44,4 +46,8 @@ func (c *FTPConnection) GetUsername() string {
 // GetPassword returns the password
 func (c *FTPConnection) GetPassword() string {
 	return c.Password
+}
+
+func (c *FTPConnection) GetProtocol() Protocol {
+	return ProtocolFTP
 }

@@ -5,27 +5,24 @@ CREATE TYPE protocol AS ENUM ('SFTP', 'FTP', 'S3', 'LOCAL');
 CREATE TYPE file_system_type AS ENUM ('POSIX', 'WINDOWS');
 
 -- Tabela de conectores
-CREATE TABLE connectors (
+CREATE TABLE storage_providers (
   id TEXT PRIMARY KEY,
-  name TEXT NOT NULL UNIQUE,
-  description TEXT,
-  protocol protocol NOT NULL,
+  name TEXT NOT NULL,
+  protocol TEXT NOT NULL,
   protocol_connection JSONB NOT NULL,
-  file_system file_system_type NOT NULL, -- define comportamento de paths/permissões
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP,
-  tags JSONB DEFAULT '[]'
+  file_system TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 -- Tabela de pastas
 CREATE TABLE folders (
   id TEXT PRIMARY KEY,
-  connector_id TEXT NOT NULL REFERENCES connectors(id),
+  storage_provider_id TEXT NOT NULL REFERENCES storage_providers(id),
   directory_path TEXT NOT NULL,
-  matches JSONB DEFAULT '[]',
-  tags JSONB DEFAULT '[]',
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP
+  tags TEXT[] NOT NULL DEFAULT '{}',
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 -- Tabela de transferências

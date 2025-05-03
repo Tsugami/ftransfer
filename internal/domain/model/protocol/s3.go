@@ -1,5 +1,7 @@
 package protocol
 
+import "github.com/Tsugami/ftransfer/internal/domain/errs"
+
 // S3Connection represents an S3 connection
 type S3Connection struct {
 	Region          string
@@ -12,17 +14,25 @@ type S3Connection struct {
 
 // Validate performs validation on the S3 connection
 func (c *S3Connection) Validate() error {
-	if c.Region == "" {
-		return ErrEmptyRegion
-	}
+	// TODO Region not required to self-hosted minio
+	// if c.Region == "" {
+	// 	return ErrEmptyRegion
+	// }
+
 	if c.Bucket == "" {
-		return ErrEmptyBucket
+		return errs.ErrEmptyBucket
 	}
+
 	if c.AccessKeyID == "" {
-		return ErrEmptyAccessKeyID
+		return errs.ErrEmptyAccessKeyID
 	}
+
 	if c.SecretAccessKey == "" {
-		return ErrEmptySecretAccessKey
+		return errs.ErrEmptySecretAccessKey
 	}
 	return nil
+}
+
+func (c *S3Connection) GetProtocol() Protocol {
+	return ProtocolS3
 }

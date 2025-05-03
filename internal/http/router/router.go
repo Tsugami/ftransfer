@@ -8,20 +8,19 @@ import (
 )
 
 type Router struct {
-	connectorHandler *handler.ConnectorHandler
-	folderHandler    *handler.FolderHandler
-	transferHandler  *handler.TransferHandler
+	engine                 *gin.Engine
+	storageProviderHandler *handler.StorageProviderHandler
+	transferHandler        *handler.TransferHandler
 }
 
 func NewRouter(
-	connectorRepo repository.ConnectorRepository,
-	folderRepo repository.FolderRepository,
+	storageProviderRepo repository.StorageProviderRepository,
 	transferRepo repository.TransferRepository,
 ) *Router {
 	return &Router{
-		connectorHandler: handler.NewConnectorHandler(connectorRepo),
-		folderHandler:    handler.NewFolderHandler(folderRepo),
-		transferHandler:  handler.NewTransferHandler(transferRepo),
+		engine:                 gin.Default(),
+		storageProviderHandler: handler.NewStorageProviderHandler(storageProviderRepo),
+		transferHandler:        handler.NewTransferHandler(transferRepo),
 	}
 }
 
@@ -33,21 +32,13 @@ func (r *Router) SetupRoutes() *gin.Engine {
 	// API v1 group
 	v1 := router.Group("/api/v1")
 	{
-		// Connector routes
-		connectors := v1.Group("/connectors")
+		// Storage Provider routes
+		storageProviders := v1.Group("/storage-providers")
 		{
-			connectors.POST("", r.connectorHandler.Create)
-			connectors.GET("", r.connectorHandler.List)
-			connectors.GET("/:id", r.connectorHandler.Get)
-			connectors.DELETE("/:id", r.connectorHandler.Delete)
-		}
-
-		// Folder routes
-		folders := v1.Group("/folders")
-		{
-			folders.POST("", r.folderHandler.Create)
-			folders.GET("/:id", r.folderHandler.Get)
-			folders.DELETE("/:id", r.folderHandler.Delete)
+			storageProviders.POST("", r.storageProviderHandler.Create)
+			storageProviders.GET("", r.storageProviderHandler.List)
+			storageProviders.GET("/:id", r.storageProviderHandler.Get)
+			storageProviders.DELETE("/:id", r.storageProviderHandler.Delete)
 		}
 
 		// Transfer routes

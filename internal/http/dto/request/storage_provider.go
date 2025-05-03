@@ -5,29 +5,33 @@ import (
 	"github.com/Tsugami/ftransfer/internal/domain/model/protocol"
 )
 
-type CreateConnectorRequest struct {
+type CreateStorageProviderRequest struct {
 	Name               string                 `json:"name" validate:"required"`
 	Description        string                 `json:"description"`
-	Protocol           string                 `json:"protocol" validate:"required"`
 	FileSystem         string                 `json:"file_system" validate:"required"`
 	ProtocolConnection map[string]interface{} `json:"protocol_connection" validate:"required"`
 	Tags               []TagRequest           `json:"tags"`
 }
 
-type UpdateConnectorRequest struct {
+type UpdateStorageProviderRequest struct {
 	Name               string                 `json:"name"`
 	Description        string                 `json:"description"`
-	Protocol           string                 `json:"protocol"`
 	FileSystem         string                 `json:"file_system"`
 	ProtocolConnection map[string]interface{} `json:"protocol_connection"`
 	Tags               []TagRequest           `json:"tags"`
 }
 
-func (r *CreateConnectorRequest) ToDomain() (*model.Connector, error) {
+func (r *CreateStorageProviderRequest) ToDomain() (*model.StorageProvider, error) {
 	// Create protocol connection based on protocol type
 	var protocolConn protocol.Connection
-	switch model.Protocol(r.Protocol) {
-	case model.ProtocolSFTP:
+
+	protocolInput, err := protocol.NewProtocol(r.ProtocolConnection["protocol"].(string))
+	if err != nil {
+		return nil, err
+	}
+
+	switch protocolInput {
+	case protocol.ProtocolSFTP:
 		protocolConn = &protocol.SFTPConnection{
 			Host:          r.ProtocolConnection["host"].(string),
 			Port:          int(r.ProtocolConnection["port"].(float64)),
@@ -36,7 +40,7 @@ func (r *CreateConnectorRequest) ToDomain() (*model.Connector, error) {
 			PrivateKey:    r.ProtocolConnection["private_key"].(string),
 			KeyPassphrase: r.ProtocolConnection["key_passphrase"].(string),
 		}
-	case model.ProtocolFTP:
+	case protocol.ProtocolFTP:
 		protocolConn = &protocol.FTPConnection{
 			Host:        r.ProtocolConnection["host"].(string),
 			Port:        int(r.ProtocolConnection["port"].(float64)),
@@ -44,7 +48,7 @@ func (r *CreateConnectorRequest) ToDomain() (*model.Connector, error) {
 			Password:    r.ProtocolConnection["password"].(string),
 			PassiveMode: r.ProtocolConnection["passive_mode"].(bool),
 		}
-	case model.ProtocolS3:
+	case protocol.ProtocolS3:
 		protocolConn = &protocol.S3Connection{
 			Region:          r.ProtocolConnection["region"].(string),
 			Bucket:          r.ProtocolConnection["bucket"].(string),
@@ -55,31 +59,27 @@ func (r *CreateConnectorRequest) ToDomain() (*model.Connector, error) {
 		}
 	}
 
-	connector := &model.Connector{
-		Base:               model.NewBase(),
-		Name:               r.Name,
-		Description:        r.Description,
-		Protocol:           model.Protocol(r.Protocol),
-		FileSystem:         model.FileSystemType(r.FileSystem),
-		ProtocolConnection: protocolConn,
-	}
+	storageProvider := model.NewStorageProvider(
+		r.Name,
+		protocolConn,
+		model.FileSystemType(r.FileSystem),
+	)
 
 	for _, tag := range r.Tags {
-		connector.AddTag(tag.Name, tag.Value)
+		storageProvider.AddTag(tag.Name, tag.Value)
 	}
 
-	if err := connector.Validate(); err != nil {
+	if err := storageProvider.Validate(); err != nil {
 		return nil, err
 	}
 
-	return connector, nil
+	return storageProvider, nil
 }
 
-func (r *UpdateConnectorRequest) ToDomain(id string) (*model.Connector, error) {
-	connector, err := (&CreateConnectorRequest{
+func (r *UpdateStorageProviderRequest) ToDomain(id string) (*model.StorageProvider, error) {
+	storageProvider, err := (&CreateStorageProviderRequest{
 		Name:               r.Name,
 		Description:        r.Description,
-		Protocol:           r.Protocol,
 		FileSystem:         r.FileSystem,
 		ProtocolConnection: r.ProtocolConnection,
 		Tags:               r.Tags,
@@ -87,6 +87,6 @@ func (r *UpdateConnectorRequest) ToDomain(id string) (*model.Connector, error) {
 	if err != nil {
 		return nil, err
 	}
-	connector.ID = id
-	return connector, nil
+	storageProvider.ID = id
+	return storageProvider, nil
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"sync"
 
+	"github.com/Tsugami/ftransfer/internal/domain/errs"
 	"github.com/Tsugami/ftransfer/internal/domain/model"
 )
 
@@ -36,7 +37,7 @@ func (r *TransferRepository) GetByID(ctx context.Context, id string) (*model.Tra
 
 	transfer, exists := r.transfers[id]
 	if !exists {
-		return nil, model.ErrTransferNotFound
+		return nil, errs.ErrTransferNotFound
 	}
 
 	return transfer, nil
@@ -59,7 +60,7 @@ func (r *TransferRepository) Delete(ctx context.Context, id string) error {
 	defer r.mu.Unlock()
 
 	if _, exists := r.transfers[id]; !exists {
-		return model.ErrTransferNotFound
+		return errs.ErrTransferNotFound
 	}
 
 	delete(r.transfers, id)
@@ -71,7 +72,7 @@ func (r *TransferRepository) Update(ctx context.Context, transfer *model.Transfe
 	defer r.mu.Unlock()
 
 	if _, exists := r.transfers[transfer.ID]; !exists {
-		return model.ErrTransferNotFound
+		return errs.ErrTransferNotFound
 	}
 
 	r.transfers[transfer.ID] = transfer

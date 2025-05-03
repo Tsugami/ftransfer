@@ -9,12 +9,11 @@ import (
 
 func main() {
 	// Initialize repositories
-	connectorRepo := memory.NewConnectorRepository()
-	folderRepo := memory.NewFolderRepository()
+	storageProviderRepo := memory.NewStorageProviderRepository()
 	transferRepo := memory.NewTransferRepository()
 
 	// Initialize router
-	r := router.NewRouter(connectorRepo, folderRepo, transferRepo)
+	r := router.NewRouter(storageProviderRepo, transferRepo)
 	engine := r.SetupRoutes()
 
 	// Start server

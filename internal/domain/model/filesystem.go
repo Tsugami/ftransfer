@@ -4,7 +4,7 @@ package model
 type FileSystemType string
 
 const (
-	FileSystemPOSIX   FileSystemType = "POSIX"
+	FileSystemUNIX    FileSystemType = "UNIX"
 	FileSystemWINDOWS FileSystemType = "WINDOWS"
 )
 
@@ -16,7 +16,7 @@ func (fs FileSystemType) String() string {
 // IsValid checks if the file system type is valid
 func (fs FileSystemType) IsValid() bool {
 	switch fs {
-	case FileSystemPOSIX, FileSystemWINDOWS:
+	case FileSystemUNIX, FileSystemWINDOWS:
 		return true
 	default:
 		return false

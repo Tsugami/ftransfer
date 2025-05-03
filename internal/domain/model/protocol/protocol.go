@@ -1,4 +1,6 @@
-package model
+package protocol
+
+import "github.com/Tsugami/ftransfer/internal/domain/errs"
 
 // Protocol represents the transfer protocol type
 type Protocol string
@@ -23,4 +25,19 @@ func (p Protocol) IsValid() bool {
 	default:
 		return false
 	}
+}
+
+func NewProtocol(protocolInput string) (Protocol, error) {
+	switch protocolInput {
+	case ProtocolSFTP.String():
+		return ProtocolSFTP, nil
+	case ProtocolFTP.String():
+		return ProtocolFTP, nil
+	case ProtocolS3.String():
+		return ProtocolS3, nil
+	case ProtocolLOCAL.String():
+		return ProtocolLOCAL, nil
+	}
+
+	return "", errs.ErrInvalidProtocol
 }

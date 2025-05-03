@@ -1,5 +1,7 @@
 package model
 
+import "github.com/Tsugami/ftransfer/internal/domain/errs"
+
 // Transfer represents a file transfer operation
 type Transfer struct {
 	Base
@@ -21,13 +23,13 @@ func NewTransfer(sourceFolderID, destinationFolderID, postTransferSourcePath str
 // Validate performs validation on the transfer
 func (t *Transfer) Validate() error {
 	if t.SourceFolderID == "" {
-		return ErrEmptySourceFolder
+		return errs.ErrEmptySourceFolder
 	}
 	if t.DestinationFolderID == "" {
-		return ErrEmptyDestinationFolder
+		return errs.ErrEmptyDestinationFolder
 	}
 	if t.PostTransferSourcePath == "" {
-		return ErrEmptyPostTransferPath
+		return errs.ErrEmptyPostTransferPath
 	}
 	return nil
 }

@@ -32,60 +32,17 @@
       "_type": "environment"
     },
     {
-      "_id": "req_connectors_list",
+      "_id": "req_storage_providers_list",
       "parentId": "wrk_ftransfer",
       "modified": 1710849600000,
       "created": 1710849600000,
-      "url": "{{ _.base_url }}/api/v1/connectors",
+      "url": "{{ _.base_url }}/api/v1/storage-providers",
       "method": "GET",
-      "name": "List Connectors",
-      "description": "Get a list of all connectors",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1710849600000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_connectors_create",
-      "parentId": "wrk_ftransfer",
-      "modified": 1710849600000,
-      "created": 1710849600000,
-      "url": "{{ _.base_url }}/api/v1/connectors",
-      "method": "POST",
-      "name": "Create Connector",
-      "description": "Create a new connector",
+      "name": "List Storage Providers",
+      "description": "Get a list of all storage providers",
       "body": {
         "mimeType": "application/json",
-        "text": {
-          "name": "My Connector",
-          "description": "A test connector",
-          "type": "s3",
-          "config": {
-            "bucket": "my-bucket",
-            "region": "us-east-1",
-            "access_key": "AKIAXXXXXXXXXXXXXXXX",
-            "secret_key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-          },
-          "tags": [
-            {
-              "name": "environment",
-              "value": "production"
-            },
-            {
-              "name": "project",
-              "value": "test"
-            }
-          ]
-        }
+        "text": ""
       },
       "parameters": [],
       "headers": [],
@@ -101,20 +58,46 @@
       "_type": "request"
     },
     {
-      "_id": "req_connectors_get",
+      "_id": "req_storage_providers_create",
       "parentId": "wrk_ftransfer",
       "modified": 1710849600000,
       "created": 1710849600000,
-      "url": "{{ _.base_url }}/api/v1/connectors/:id",
+      "url": "{{ _.base_url }}/api/v1/storage-providers",
+      "method": "POST",
+      "name": "Create Storage Provider",
+      "description": "Create a new storage provider",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"My Storage Provider\",\n  \"description\": \"A test storage provider\",\n  \"protocol\": \"local\",\n  \"protocol_connection\": {\n    \"path\": \"/path/to/storage\"\n  },\n  \"file_system\": \"local\"\n}"
+      },
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710849600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_storage_providers_get",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710849600000,
+      "created": 1710849600000,
+      "url": "{{ _.base_url }}/api/v1/storage-providers/:id",
       "method": "GET",
-      "name": "Get Connector",
-      "description": "Get a specific connector by ID",
+      "name": "Get Storage Provider",
+      "description": "Get a specific storage provider by ID",
       "body": {},
       "parameters": [
         {
           "name": "id",
-          "value": "connector-id",
-          "description": "Connector ID",
+          "value": "storage-provider-id",
+          "description": "Storage Provider ID",
           "type": "text"
         }
       ],
@@ -131,20 +114,20 @@
       "_type": "request"
     },
     {
-      "_id": "req_connectors_delete",
+      "_id": "req_storage_providers_delete",
       "parentId": "wrk_ftransfer",
       "modified": 1710849600000,
       "created": 1710849600000,
-      "url": "{{ _.base_url }}/api/v1/connectors/:id",
+      "url": "{{ _.base_url }}/api/v1/storage-providers/:id",
       "method": "DELETE",
-      "name": "Delete Connector",
-      "description": "Delete a specific connector by ID",
+      "name": "Delete Storage Provider",
+      "description": "Delete a specific storage provider by ID",
       "body": {},
       "parameters": [
         {
           "name": "id",
-          "value": "connector-id",
-          "description": "Connector ID",
+          "value": "storage-provider-id",
+          "description": "Storage Provider ID",
           "type": "text"
         }
       ],
@@ -171,7 +154,7 @@
       "description": "Create a new folder",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"connector_id\": \"connector-id\",\n  \"directory_path\": \"/path/to/folder\",\n  \"tags\": [\"backup\", \"daily\"]\n}"
+        "text": "{\n  \"storage_provider_id\": \"storage-provider-id\",\n  \"directory_path\": \"/path/to/folder\",\n  \"tags\": [\"backup\", \"daily\"]\n}"
       },
       "parameters": [],
       "headers": [],
@@ -260,8 +243,8 @@
         "text": {
           "name": "My Transfer",
           "description": "A test transfer",
-          "source_connector_id": "{{ _.connector_id }}",
-          "destination_connector_id": "{{ _.connector_id }}",
+          "source_storageProvider_id": "{{ _.storageProvider_id }}",
+          "destination_storageProvider_id": "{{ _.storageProvider_id }}",
           "source_path": "/source/path",
           "destination_path": "/destination/path",
           "schedule": {

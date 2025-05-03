@@ -1,5 +1,7 @@
 package protocol
 
+import "github.com/Tsugami/ftransfer/internal/domain/errs"
+
 // SFTPConnection represents an SFTP connection
 type SFTPConnection struct {
 	Host          string
@@ -13,16 +15,16 @@ type SFTPConnection struct {
 // Validate performs validation on the SFTP connection
 func (c *SFTPConnection) Validate() error {
 	if c.Host == "" {
-		return ErrEmptyHost
+		return errs.ErrEmptyHost
 	}
 	if c.Port == 0 {
-		return ErrEmptyPort
+		return errs.ErrEmptyPort
 	}
 	if c.Username == "" {
-		return ErrEmptyUsername
+		return errs.ErrEmptyUsername
 	}
 	if c.Password == "" && c.PrivateKey == "" {
-		return ErrEmptyCredentials
+		return errs.ErrEmptyCredentials
 	}
 	return nil
 }
@@ -45,4 +47,8 @@ func (c *SFTPConnection) GetUsername() string {
 // GetPassword returns the password
 func (c *SFTPConnection) GetPassword() string {
 	return c.Password
+}
+
+func (c *SFTPConnection) GetProtocol() Protocol {
+	return ProtocolSFTP
 }
