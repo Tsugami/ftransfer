@@ -1,4 +1,4 @@
-package model
+package storage_provider
 
 // FileSystemType represents the type of file system
 type FileSystemType string

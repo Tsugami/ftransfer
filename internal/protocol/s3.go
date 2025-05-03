@@ -1,7 +1,5 @@
 package protocol
 
-import "github.com/Tsugami/ftransfer/internal/domain/errs"
-
 // S3Connection represents an S3 connection
 type S3Connection struct {
 	Region          string
@@ -20,15 +18,15 @@ func (c *S3Connection) Validate() error {
 	// }
 
 	if c.Bucket == "" {
-		return errs.ErrEmptyBucket
+		return ErrEmptyS3Bucket
 	}
 
 	if c.AccessKeyID == "" {
-		return errs.ErrEmptyAccessKeyID
+		return ErrEmptyS3AccessKeyID
 	}
 
 	if c.SecretAccessKey == "" {
-		return errs.ErrEmptySecretAccessKey
+		return ErrEmptyS3SecretAccessKey
 	}
 	return nil
 }

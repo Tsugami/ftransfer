@@ -1,7 +1,5 @@
 package protocol
 
-import "github.com/Tsugami/ftransfer/internal/domain/errs"
-
 // Protocol represents the transfer protocol type
 type Protocol string
 
@@ -39,5 +37,5 @@ func NewProtocol(protocolInput string) (Protocol, error) {
 		return ProtocolLOCAL, nil
 	}
 
-	return "", errs.ErrInvalidProtocol
+	return "", ErrInvalidProtocol
 }
