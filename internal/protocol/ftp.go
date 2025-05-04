@@ -49,3 +49,14 @@ func (c *FTPConnection) GetPassword() string {
 func (c *FTPConnection) GetProtocol() Protocol {
 	return ProtocolFTP
 }
+
+func (c *FTPConnection) GetJson() map[string]interface{} {
+	return map[string]interface{}{
+		"protocol":     c.GetProtocol(),
+		"host":         c.Host,
+		"port":         c.Port,
+		"username":     c.Username,
+		"password":     c.Password,
+		"passive_mode": c.PassiveMode,
+	}
+}

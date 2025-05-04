@@ -77,6 +77,11 @@ func (s *StorageProviderService) Update(ctx context.Context, id ID, name string,
 		FileSystem:         FileSystemType(fileSystem),
 		ProtocolConnection: protocolConn,
 	}
+
+	if err := storageProvider.Validate(); err != nil {
+		return err
+	}
+
 	err = s.Repo.Update(ctx, &storageProvider)
 	if err != nil {
 		return err

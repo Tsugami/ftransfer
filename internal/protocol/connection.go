@@ -10,6 +10,7 @@ import (
 type Connection interface {
 	Validate() error
 	GetProtocol() Protocol
+	GetJson() map[string]interface{}
 }
 
 func NewConnection(connection map[string]interface{}) (Connection, error) {

@@ -3,7 +3,6 @@ package error_middleware
 
 import (
 	"errors"
-	"reflect"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,10 +30,6 @@ func ErrorHandler(errMap ...*errorMapping) gin.HandlerFunc {
 			"error": "Internal server error",
 		})
 	}
-}
-
-func isType(a, b interface{}) bool {
-	return reflect.TypeOf(a) == reflect.TypeOf(b)
 }
 
 type errorMapping struct {

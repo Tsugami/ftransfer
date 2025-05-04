@@ -24,6 +24,10 @@ func SetupRoutes(
 	sp_group := v1.Group("/storage-providers")
 	{
 		sp_group.POST("", handler.CreateStorageProvider)
+		sp_group.GET("", handler.ListStorageProviders)
+		sp_group.GET("/:id", handler.GetStorageProvider)
+		sp_group.PUT("/:id", handler.UpdateStorageProvider)
+		sp_group.DELETE("/:id", handler.DeleteStorageProvider)
 	}
 
 	// rg.GET("/transfers", listTransfers)

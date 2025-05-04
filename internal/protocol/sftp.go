@@ -12,6 +12,7 @@ type SFTPConnection struct {
 
 // Validate performs validation on the SFTP connection
 func (c *SFTPConnection) Validate() error {
+
 	if c.Host == "" {
 		return ErrEmptySFTPUsername
 	}
@@ -49,4 +50,16 @@ func (c *SFTPConnection) GetPassword() string {
 
 func (c *SFTPConnection) GetProtocol() Protocol {
 	return ProtocolSFTP
+}
+
+func (c *SFTPConnection) GetJson() map[string]interface{} {
+	return map[string]interface{}{
+		"protocol":       c.GetProtocol(),
+		"host":           c.Host,
+		"port":           c.Port,
+		"username":       c.Username,
+		"password":       c.Password,
+		"private_key":    c.PrivateKey,
+		"key_passphrase": c.KeyPassphrase,
+	}
 }

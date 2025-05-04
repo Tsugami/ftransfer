@@ -54,14 +54,14 @@ func OpenDB() (*sql.DB, error) {
 		return nil, err
 	}
 
-	if err := MigrateDropDB(db); err != nil {
-		return nil, err
-	}
-
+	// TODO move this to a config
+	// if err := MigrateDropDB(db); err != nil {
+	// 	return nil, err
+	// }
 	// Migrate the database
-	if err := MigrateUpDB(db); err != nil {
-		return nil, err
-	}
+	// if err := MigrateUpDB(db); err != nil {
+	// 	return nil, err
+	// }
 
 	// Return the database connection
 	return db, nil

@@ -3,8 +3,8 @@
 # Variables
 BINARY_NAME=./tmp/ftransfer
 DB_NAME=ftransfer
-DB_USER=postgres
-DB_PASSWORD=postgres
+DB_USER=user
+DB_PASSWORD=pass
 DB_HOST=localhost
 DB_PORT=5432
 MIGRATION_DIR=./migrations
@@ -50,3 +50,7 @@ dev-tools:
 
 dev:
 	air -c .air.toml
+
+
+pgsql:
+	docker exec -it ftransfer_postgres psql -U $(DB_USER) -d $(DB_NAME)
