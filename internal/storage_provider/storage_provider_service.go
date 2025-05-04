@@ -37,10 +37,10 @@ func (s *StorageProviderService) Create(ctx context.Context, name string, fileSy
 
 	id, err := s.Repo.Create(ctx, &storageProvider)
 	if err != nil {
-		return nil, ErrCreateStorageProvider
+		return nil, err
 	}
 
-	storageProvider.ID = id
+	storageProvider.ID = *id
 
 	return &storageProvider, nil
 }
@@ -48,7 +48,7 @@ func (s *StorageProviderService) Create(ctx context.Context, name string, fileSy
 func (s *StorageProviderService) List(ctx context.Context) ([]*StorageProvider, error) {
 	all, err := s.Repo.List(ctx)
 	if err != nil {
-		return nil, ErrListStorageProviders
+		return nil, err
 	}
 
 	return all, nil
@@ -56,7 +56,7 @@ func (s *StorageProviderService) List(ctx context.Context) ([]*StorageProvider, 
 func (s *StorageProviderService) Get(ctx context.Context, id ID) (*StorageProvider, error) {
 	storageProvider, err := s.Repo.GetByID(ctx, id)
 	if err != nil {
-		return nil, ErrGetStorageProvider
+		return nil, err
 	}
 	return storageProvider, nil
 }
@@ -79,7 +79,7 @@ func (s *StorageProviderService) Update(ctx context.Context, id ID, name string,
 	}
 	err = s.Repo.Update(ctx, &storageProvider)
 	if err != nil {
-		return ErrUpdateStorageProvider
+		return err
 	}
 
 	return nil
@@ -87,7 +87,7 @@ func (s *StorageProviderService) Update(ctx context.Context, id ID, name string,
 func (s *StorageProviderService) Delete(ctx context.Context, id ID) error {
 	err := s.Repo.Delete(ctx, id)
 	if err != nil {
-		return ErrDeleteStorageProvider
+		return err
 	}
 
 	return nil

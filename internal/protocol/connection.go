@@ -1,5 +1,11 @@
 package protocol
 
+import (
+	"fmt"
+
+	im_util "github.com/Tsugami/ftransfer/pkg/interfacemaputil"
+)
+
 // Connection represents a generic protocol connection
 type Connection interface {
 	Validate() error
@@ -7,7 +13,16 @@ type Connection interface {
 }
 
 func NewConnection(connection map[string]interface{}) (Connection, error) {
-	protocol, err := NewProtocol(connection["protocol"].(string))
+	fmt.Println("Creating new connection with connection:", connection)
+
+	if connection == nil {
+		return nil, ErrInvalidProtocolConnection
+	}
+	if connection["protocol"] == nil {
+		return nil, ErrInvalidProtocol
+	}
+
+	protocol, err := NewProtocol(im_util.GetString(connection, "protocol"))
 	if err != nil {
 		return nil, err
 	}
@@ -17,29 +32,29 @@ func NewConnection(connection map[string]interface{}) (Connection, error) {
 	switch protocol {
 	case ProtocolSFTP:
 		protocolConn = &SFTPConnection{
-			Host:          connection["host"].(string),
-			Port:          int(connection["port"].(float64)),
-			Username:      connection["username"].(string),
-			Password:      connection["password"].(string),
-			PrivateKey:    connection["private_key"].(string),
-			KeyPassphrase: connection["key_passphrase"].(string),
+			Host:          im_util.GetString(connection, "host"),
+			Port:          im_util.GetInt(connection, "port"),
+			Username:      im_util.GetString(connection, "username"),
+			Password:      im_util.GetString(connection, "password"),
+			PrivateKey:    im_util.GetString(connection, "private_key"),
+			KeyPassphrase: im_util.GetString(connection, "key_passphrase"),
 		}
 	case ProtocolFTP:
 		protocolConn = &FTPConnection{
-			Host:        connection["host"].(string),
-			Port:        int(connection["port"].(float64)),
-			Username:    connection["username"].(string),
-			Password:    connection["password"].(string),
-			PassiveMode: connection["passive_mode"].(bool),
+			Host:        im_util.GetString(connection, "host"),
+			Port:        im_util.GetInt(connection, "port"),
+			Username:    im_util.GetString(connection, "username"),
+			Password:    im_util.GetString(connection, "password"),
+			PassiveMode: im_util.GetBool(connection, "passive_mode"),
 		}
 	case ProtocolS3:
 		protocolConn = &S3Connection{
-			Region:          connection["region"].(string),
-			Bucket:          connection["bucket"].(string),
-			AccessKeyID:     connection["access_key_id"].(string),
-			SecretAccessKey: connection["secret_access_key"].(string),
-			Endpoint:        connection["endpoint"].(string),
-			UseSSL:          connection["use_ssl"].(bool),
+			Region:          im_util.GetString(connection, "region"),
+			Bucket:          im_util.GetString(connection, "bucket"),
+			AccessKeyID:     im_util.GetString(connection, "access_key_id"),
+			SecretAccessKey: im_util.GetString(connection, "secret_access_key"),
+			Endpoint:        im_util.GetString(connection, "endpoint"),
+			UseSSL:          im_util.GetBool(connection, "use_ssl"),
 		}
 	}
 

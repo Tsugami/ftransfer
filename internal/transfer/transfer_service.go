@@ -2,6 +2,8 @@ package transfer
 
 import (
 	"context"
+
+	"github.com/Tsugami/ftransfer/internal/storage_provider"
 )
 
 type TransferService struct {
@@ -13,11 +15,13 @@ func NewService(repo TransferRepository) *TransferService {
 		Repo: repo,
 	}
 }
-func (s *TransferService) Create(ctx context.Context, sourceDir Directory, destinationDir Directory, postTransferSourceDir Directory) (*Transfer, error) {
+func (s *TransferService) Create(ctx context.Context, sourceDir Directory, destinationDir Directory, postTransferSourceDir Directory, sourceStorageProviderID storage_provider.ID, destinationStorageProviderID storage_provider.ID) (*Transfer, error) {
 	transfer := Transfer{
-		SourceDir:             sourceDir,
-		DestinationDir:        destinationDir,
-		PostTransferSourceDir: postTransferSourceDir,
+		SourceDir:                    sourceDir,
+		DestinationDir:               destinationDir,
+		PostTransferSourceDir:        postTransferSourceDir,
+		SourceStorageProviderID:      sourceStorageProviderID,
+		DestinationStorageProviderID: destinationStorageProviderID,
 	}
 
 	if err := transfer.Validate(); err != nil {
@@ -48,11 +52,13 @@ func (s *TransferService) Get(ctx context.Context, id ID) (*Transfer, error) {
 	return transfer, nil
 }
 
-func (s *TransferService) Update(ctx context.Context, id ID, sourceDir Directory, destinationDir Directory, postTransferSourceDir Directory) error {
+func (s *TransferService) Update(ctx context.Context, id ID, sourceDir Directory, destinationDir Directory, postTransferSourceDir Directory, sourceStorageProviderID storage_provider.ID, destinationStorageProviderID storage_provider.ID) error {
 	transfer := Transfer{
-		SourceDir:             sourceDir,
-		DestinationDir:        destinationDir,
-		PostTransferSourceDir: postTransferSourceDir,
+		SourceDir:                    sourceDir,
+		DestinationDir:               destinationDir,
+		PostTransferSourceDir:        postTransferSourceDir,
+		SourceStorageProviderID:      sourceStorageProviderID,
+		DestinationStorageProviderID: destinationStorageProviderID,
 	}
 
 	if err := transfer.Validate(); err != nil {

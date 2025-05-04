@@ -12,7 +12,7 @@ type StorageProviderReader interface {
 
 // StorageProviderWriter defines the interface for storage provider write operations
 type StorageProviderWriter interface {
-	Create(ctx context.Context, storageProvider *StorageProvider) (ID, error)
+	Create(ctx context.Context, storageProvider *StorageProvider) (*ID, error)
 	Update(ctx context.Context, storageProvider *StorageProvider) error
 	Delete(ctx context.Context, id ID) error
 }

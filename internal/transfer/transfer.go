@@ -1,20 +1,15 @@
 package transfer
 
+import "github.com/Tsugami/ftransfer/internal/storage_provider"
+
 // Transfer represents a file transfer operation
 type Transfer struct {
-	ID                    ID
-	SourceDir             Directory
-	DestinationDir        Directory
-	PostTransferSourceDir Directory
-}
-
-// NewTransfer creates a new Transfer instance
-func NewTransfer(sourceDir Directory, destinationDir Directory, postTransferSourceDir Directory) *Transfer {
-	return &Transfer{
-		SourceDir:             sourceDir,
-		DestinationDir:        destinationDir,
-		PostTransferSourceDir: postTransferSourceDir,
-	}
+	ID                           ID
+	SourceDir                    Directory
+	DestinationDir               Directory
+	PostTransferSourceDir        Directory
+	SourceStorageProviderID      storage_provider.ID
+	DestinationStorageProviderID storage_provider.ID
 }
 
 // Validate performs validation on the transfer
@@ -29,6 +24,14 @@ func (t *Transfer) Validate() error {
 
 	if !t.PostTransferSourceDir.IsValid() {
 		return ErrEmptyPostTransferDir
+	}
+
+	if t.SourceStorageProviderID == "" {
+		return ErrEmptySourceStorageProviderID
+	}
+
+	if t.DestinationStorageProviderID == "" {
+		return ErrEmptyDestinationStorageProviderID
 	}
 	return nil
 }
