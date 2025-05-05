@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Tsugami/ftransfer/internal/protocol"
+	"github.com/Tsugami/ftransfer/internal/storage_provider"
 	error_middleware "github.com/Tsugami/ftransfer/pkg/errormiddleware"
 	"github.com/gin-gonic/gin"
 )
@@ -24,5 +25,17 @@ func SetupMiddleware() gin.HandlerFunc {
 		error_middleware.Map(protocol.ErrEmptyS3Region).ToStatusCode(http.StatusBadRequest),
 		error_middleware.Map(protocol.ErrEmptyS3Endpoint).ToStatusCode(http.StatusBadRequest),
 		error_middleware.Map(protocol.ErrEmptyS3UseSSL).ToStatusCode(http.StatusBadRequest),
+		error_middleware.Map(storage_provider.ErrInvalidStorageProvider).ToStatusCode(http.StatusBadGateway),
+		error_middleware.Map(storage_provider.ErrCreateStorageProvider).ToStatusCode(http.StatusBadGateway),
+		error_middleware.Map(storage_provider.ErrUpdateStorageProvider).ToStatusCode(http.StatusBadGateway),
+		error_middleware.Map(storage_provider.ErrDeleteStorageProvider).ToStatusCode(http.StatusBadGateway),
+		error_middleware.Map(storage_provider.ErrGetStorageProvider).ToStatusCode(http.StatusBadGateway),
+		error_middleware.Map(storage_provider.ErrListStorageProviders).ToStatusCode(http.StatusBadGateway),
+		error_middleware.Map(storage_provider.ErrStorageProviderNotFound).ToStatusCode(http.StatusConflict),
+		error_middleware.Map(storage_provider.ErrStorageProviderExists).ToStatusCode(http.StatusNotFound),
+		error_middleware.Map(storage_provider.ErrEmptyName).ToStatusCode(http.StatusBadRequest),
+		error_middleware.Map(storage_provider.ErrEmptyProtocolConnection).ToStatusCode(http.StatusBadRequest),
+		error_middleware.Map(storage_provider.ErrEmptyFileSystem).ToStatusCode(http.StatusBadRequest),
+		error_middleware.Map(storage_provider.ErrInvalidFileSystem).ToStatusCode(http.StatusBadRequest),
 	)
 }

@@ -40,10 +40,6 @@ func NewStorageProviderRepository(db *sql.DB) *StorageProviderRepository {
 }
 
 func (r *StorageProviderRepository) Create(ctx context.Context, storageProvider *storage_provider.StorageProvider) (*storage_provider.ID, error) {
-	if err := storageProvider.Validate(); err != nil {
-		return nil, err
-	}
-
 	id := storage_provider.NewID(uuid.New().String())
 
 	query := `INSERT INTO storage_providers (id, name, file_system, protocol_connection) VALUES ($1, $2, $3, $4)`
@@ -114,7 +110,12 @@ func (r *StorageProviderRepository) GetByID(ctx context.Context, id storage_prov
 
 func (r *StorageProviderRepository) Update(ctx context.Context, storageProvider *storage_provider.StorageProvider) error {
 	query := `UPDATE storage_providers SET name = $1, file_system = $2, protocol_connection = $3 WHERE id = $4`
-	_, err := r.db.ExecContext(ctx, query, storageProvider.Name, storageProvider.FileSystem, storageProvider.ProtocolConnection, storageProvider.ID)
+	protocolConnection, err := json.Marshal(storageProvider.ProtocolConnection.GetJson())
+	if err != nil {
+		return err
+	}
+
+	_, err = r.db.ExecContext(ctx, query, storageProvider.Name, storageProvider.FileSystem, protocolConnection, storageProvider.ID)
 	return err
 }
 

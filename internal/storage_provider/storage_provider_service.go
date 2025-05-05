@@ -71,6 +71,16 @@ func (s *StorageProviderService) Update(ctx context.Context, id ID, name string,
 		return err
 	}
 
+	// Get the existing storage provider
+	existingStorageProvider, err := s.Repo.GetByID(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	if existingStorageProvider == nil {
+		return ErrStorageProviderNotFound
+	}
+
 	storageProvider := StorageProvider{
 		ID:                 id,
 		Name:               name,
