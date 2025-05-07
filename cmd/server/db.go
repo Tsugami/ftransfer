@@ -58,7 +58,7 @@ func OpenDB() (*sql.DB, error) {
 	// if err := MigrateDropDB(db); err != nil {
 	// 	return nil, err
 	// }
-	// Migrate the database
+	// // Migrate the database
 	// if err := MigrateUpDB(db); err != nil {
 	// 	return nil, err
 	// }

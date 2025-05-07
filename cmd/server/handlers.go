@@ -14,7 +14,7 @@ type Handler struct {
 func (h *Handler) CreateStorageProvider(c *gin.Context) {
 	var input CreateStorageProviderRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Request body is not valid"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
