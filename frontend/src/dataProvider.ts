@@ -47,6 +47,7 @@ export const dataProvider: DataProvider = {
   },
 
   update: async (resource, params) => {
+    console.log('updating', params);
     const { data } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: 'PUT',
       body: JSON.stringify(params.data),
@@ -56,14 +57,8 @@ export const dataProvider: DataProvider = {
     };
   },
 
-  updateMany: async (resource, params) => {
-    const { data } = await httpClient(`${apiUrl}/${resource}`, {
-      method: 'PUT',
-      body: JSON.stringify(params.ids),
-    });
-    return {
-      data,
-    };
+  updateMany: async (_resource, _params) => {
+    throw new Error('Update many not supported');
   },
 
   delete: async (resource, params) => {
@@ -75,13 +70,7 @@ export const dataProvider: DataProvider = {
     };
   },
 
-  deleteMany: async (resource, params) => {
-    const { data } = await httpClient(`${apiUrl}/${resource}`, {
-      method: 'DELETE',
-      body: JSON.stringify(params.ids),
-    });
-    return {
-      data,
-    };
+  deleteMany: async (_resource, _params) => {
+    throw new Error('Delete many not supported');
   },
 }; 

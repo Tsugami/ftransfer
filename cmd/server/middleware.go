@@ -6,10 +6,18 @@ import (
 	"github.com/Tsugami/ftransfer/internal/protocol"
 	"github.com/Tsugami/ftransfer/internal/storage_provider"
 	error_middleware "github.com/Tsugami/ftransfer/pkg/errormiddleware"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func SetupMiddleware() gin.HandlerFunc {
+func SetupMiddleware(
+	app *gin.Engine,
+) {
+	app.Use(CORSMiddleware())
+	app.Use(ErrorMiddleware())
+}
+
+func ErrorMiddleware() gin.HandlerFunc {
 	return error_middleware.ErrorHandler(
 		error_middleware.Map(protocol.ErrInvalidProtocolConnection).ToStatusCode(http.StatusBadRequest),
 		error_middleware.Map(protocol.ErrInvalidProtocol).ToStatusCode(http.StatusBadRequest),
@@ -38,4 +46,12 @@ func SetupMiddleware() gin.HandlerFunc {
 		error_middleware.Map(storage_provider.ErrEmptyFileSystem).ToStatusCode(http.StatusBadRequest),
 		error_middleware.Map(storage_provider.ErrInvalidFileSystem).ToStatusCode(http.StatusBadRequest),
 	)
+}
+
+func CORSMiddleware() gin.HandlerFunc {
+	return cors.New(cors.Config{
+		AllowAllOrigins: true,
+		AllowHeaders:    []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE"},
+	})
 }

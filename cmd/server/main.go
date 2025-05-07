@@ -5,6 +5,7 @@ import (
 
 	"github.com/Tsugami/ftransfer/internal/storage_provider"
 	"github.com/Tsugami/ftransfer/repositories"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -23,13 +24,16 @@ func main() {
 
 	// Initialize services
 	storageProviderService := storage_provider.NewService(storageProviderRepo)
+
+	server := gin.Default()
+
 	// // Initialize router
-	engine := SetupRoutes(storageProviderService)
-	engine.Use(SetupMiddleware())
+	SetupMiddleware(server)
+	SetupRoutes(server, storageProviderService)
 
 	// // Start server
 	log.Println("Server starting on :8080")
-	if err := engine.Run(":8080"); err != nil {
+	if err := server.Run(":8080"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }

@@ -6,6 +6,7 @@ import (
 )
 
 func SetupRoutes(
+	router *gin.Engine,
 	// transferService transfer.TransferService,
 	storageProviderService *storage_provider.StorageProviderService,
 ) *gin.Engine {
@@ -13,10 +14,6 @@ func SetupRoutes(
 	handler := &Handler{
 		storageProviderService: storageProviderService,
 	}
-
-	// Initialize the router
-	router := gin.Default()
-	router.Use(SetupMiddleware())
 
 	v1 := router.Group("/api/v1")
 	// Define the routes

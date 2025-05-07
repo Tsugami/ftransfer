@@ -100,10 +100,19 @@ func (r *StorageProviderRepository) List(ctx context.Context) ([]*storage_provid
 func (r *StorageProviderRepository) GetByID(ctx context.Context, id storage_provider.ID) (*storage_provider.StorageProvider, error) {
 	query := `SELECT * FROM storage_providers WHERE id = $1`
 	var storageProvider storage_provider.StorageProvider
-	if err := r.db.QueryRowContext(ctx, query, id).Scan(&storageProvider.ID, &storageProvider.Name, &storageProvider.FileSystem, &storageProvider.ProtocolConnection); err != nil {
+	var protocolConnectionJsonb ProtocolConnectionJsonb
+
+	if err := r.db.QueryRowContext(ctx, query, id).Scan(&storageProvider.ID, &storageProvider.Name, &storageProvider.FileSystem, &protocolConnectionJsonb); err != nil {
 
 		return nil, err
 	}
+
+	protocolConnection, err := protocolConnectionJsonb.To()
+	if err != nil {
+		return nil, err
+	}
+
+	storageProvider.ProtocolConnection = protocolConnection
 
 	return &storageProvider, nil
 }

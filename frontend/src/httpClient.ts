@@ -23,10 +23,13 @@ export const httpClient = async (url: string, options: RequestOptions = {}): Pro
   });
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const error = (await response?.json?.())?.error ?? response?.statusText;
+
+    throw new Error(`Error! status: ${error}`);
   }
 
   const json = await response.json();
+
   return {
     data: json.data || json,
     total: json.total,

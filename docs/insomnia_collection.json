@@ -1,53 +1,51 @@
 {
   "_type": "export",
   "__export_format": 4,
-  "__export_date": "2024-03-19T12:00:00.000Z",
-  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "__export_date": "2024-03-20T12:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2024.1.0",
   "resources": [
     {
       "_id": "wrk_ftransfer",
       "parentId": null,
-      "modified": 1710849600000,
-      "created": 1710849600000,
+      "modified": 1710936000000,
+      "created": 1710936000000,
       "name": "FTransfer API",
-      "description": "API collection for FTransfer service",
+      "description": "API collection for FTransfer service - Documentação completa das APIs de transferência de arquivos",
       "scope": "collection",
       "_type": "workspace"
     },
     {
       "_id": "env_base",
       "parentId": "wrk_ftransfer",
-      "modified": 1710849600000,
-      "created": 1710849600000,
+      "modified": 1710936000000,
+      "created": 1710936000000,
       "name": "Base Environment",
       "data": {
-        "base_url": "http://localhost:8080"
+        "base_url": "http://localhost:8080",
+        "api_version": "v1"
       },
       "dataPropertyOrder": {
-        "&": ["base_url"]
+        "&": ["base_url", "api_version"]
       },
       "color": null,
       "isPrivate": false,
-      "metaSortKey": -1710849600000,
+      "metaSortKey": -1710936000000,
       "_type": "environment"
     },
     {
       "_id": "req_storage_providers_list",
       "parentId": "wrk_ftransfer",
-      "modified": 1710849600000,
-      "created": 1710849600000,
-      "url": "{{ _.base_url }}/api/v1/storage-providers",
+      "modified": 1710936000000,
+      "created": 1710936000000,
+      "url": "{{ _.base_url }}/api/{{ _.api_version }}/storage-providers",
       "method": "GET",
       "name": "List Storage Providers",
       "description": "Get a list of all storage providers",
-      "body": {
-        "mimeType": "application/json",
-        "text": ""
-      },
+      "body": {},
       "parameters": [],
       "headers": [],
       "authentication": {},
-      "metaSortKey": -1710849600000,
+      "metaSortKey": -1710936000000,
       "isPrivate": false,
       "settingStoreCookies": true,
       "settingSendCookies": true,
@@ -60,20 +58,20 @@
     {
       "_id": "req_storage_providers_create",
       "parentId": "wrk_ftransfer",
-      "modified": 1710849600000,
-      "created": 1710849600000,
-      "url": "{{ _.base_url }}/api/v1/storage-providers",
+      "modified": 1710936000000,
+      "created": 1710936000000,
+      "url": "{{ _.base_url }}/api/{{ _.api_version }}/storage-providers",
       "method": "POST",
       "name": "Create Storage Provider",
       "description": "Create a new storage provider",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"name\": \"My Storage Provider\",\n  \"description\": \"A test storage provider\",\n  \"protocol\": \"local\",\n  \"protocol_connection\": {\n    \"path\": \"/path/to/storage\"\n  },\n  \"file_system\": \"local\"\n}"
+        "text": "{\n  \"name\": \"My Storage Provider\",\n  \"file_system\": \"UNIX\",\n  \"protocol_connection\": {\n    \"path\": \"/path/to/storage\"\n  }\n}"
       },
       "parameters": [],
       "headers": [],
       "authentication": {},
-      "metaSortKey": -1710849600000,
+      "metaSortKey": -1710936000000,
       "isPrivate": false,
       "settingStoreCookies": true,
       "settingSendCookies": true,
@@ -86,9 +84,9 @@
     {
       "_id": "req_storage_providers_get",
       "parentId": "wrk_ftransfer",
-      "modified": 1710849600000,
-      "created": 1710849600000,
-      "url": "{{ _.base_url }}/api/v1/storage-providers/:id",
+      "modified": 1710936000000,
+      "created": 1710936000000,
+      "url": "{{ _.base_url }}/api/{{ _.api_version }}/storage-providers/:id",
       "method": "GET",
       "name": "Get Storage Provider",
       "description": "Get a specific storage provider by ID",
@@ -103,7 +101,40 @@
       ],
       "headers": [],
       "authentication": {},
-      "metaSortKey": -1710849600000,
+      "metaSortKey": -1710936000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_storage_providers_update",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710936000000,
+      "created": 1710936000000,
+      "url": "{{ _.base_url }}/api/{{ _.api_version }}/storage-providers/:id",
+      "method": "PUT",
+      "name": "Update Storage Provider",
+      "description": "Update a specific storage provider by ID",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Updated Storage Provider\",\n  \"file_system\": \"UNIX\",\n  \"protocol_connection\": {\n    \"path\": \"/path/to/updated/storage\"\n  }\n}"
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "value": "storage-provider-id",
+          "description": "Storage Provider ID",
+          "type": "text"
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710936000000,
       "isPrivate": false,
       "settingStoreCookies": true,
       "settingSendCookies": true,
@@ -116,9 +147,9 @@
     {
       "_id": "req_storage_providers_delete",
       "parentId": "wrk_ftransfer",
-      "modified": 1710849600000,
-      "created": 1710849600000,
-      "url": "{{ _.base_url }}/api/v1/storage-providers/:id",
+      "modified": 1710936000000,
+      "created": 1710936000000,
+      "url": "{{ _.base_url }}/api/{{ _.api_version }}/storage-providers/:id",
       "method": "DELETE",
       "name": "Delete Storage Provider",
       "description": "Delete a specific storage provider by ID",
@@ -133,7 +164,7 @@
       ],
       "headers": [],
       "authentication": {},
-      "metaSortKey": -1710849600000,
+      "metaSortKey": -1710936000000,
       "isPrivate": false,
       "settingStoreCookies": true,
       "settingSendCookies": true,
@@ -328,6 +359,66 @@
       "headers": [],
       "authentication": {},
       "metaSortKey": -1710849600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_transfers_status",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710936000000,
+      "created": 1710936000000,
+      "url": "{{ _.base_url }}/api/{{ _.api_version }}/transfers/:id/status",
+      "method": "GET",
+      "name": "Get Transfer Status",
+      "description": "Get the current status of a transfer",
+      "body": {},
+      "parameters": [
+        {
+          "name": "id",
+          "value": "transfer-id",
+          "description": "Transfer ID",
+          "type": "text"
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710936000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_transfers_cancel",
+      "parentId": "wrk_ftransfer",
+      "modified": 1710936000000,
+      "created": 1710936000000,
+      "url": "{{ _.base_url }}/api/{{ _.api_version }}/transfers/:id/cancel",
+      "method": "POST",
+      "name": "Cancel Transfer",
+      "description": "Cancel an ongoing transfer",
+      "body": {},
+      "parameters": [
+        {
+          "name": "id",
+          "value": "transfer-id",
+          "description": "Transfer ID",
+          "type": "text"
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1710936000000,
       "isPrivate": false,
       "settingStoreCookies": true,
       "settingSendCookies": true,
