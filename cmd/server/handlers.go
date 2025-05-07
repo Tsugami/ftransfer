@@ -30,7 +30,7 @@ func (h *Handler) CreateStorageProvider(c *gin.Context) {
 		return
 	}
 
-	var response *StorageProviderResponse = NewStorageProviderResponse(storage)
+	var response StorageProviderResponse = NewStorageProviderResponse(storage)
 	c.JSON(http.StatusCreated, response)
 }
 
@@ -41,9 +41,10 @@ func (h *Handler) ListStorageProviders(c *gin.Context) {
 		return
 	}
 
-	var response []*StorageProviderResponse = NewStorageProviderResponseList(storageProviders)
+	response := NewStorageProviderResponseList(storageProviders)
 	c.JSON(http.StatusOK, response)
 }
+
 func (h *Handler) GetStorageProvider(c *gin.Context) {
 	id := storage_provider.ID(c.Param("id"))
 
@@ -80,6 +81,7 @@ func (h *Handler) UpdateStorageProvider(c *gin.Context) {
 
 	c.Status(http.StatusOK)
 }
+
 func (h *Handler) DeleteStorageProvider(c *gin.Context) {
 	id := storage_provider.ID(c.Param("id"))
 

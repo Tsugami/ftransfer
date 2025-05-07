@@ -21,8 +21,8 @@ type StorageProviderResponse struct {
 	ProtocolConnection map[string]interface{} `json:"protocol_connection"`
 }
 
-func NewStorageProviderResponse(storage *storage_provider.StorageProvider) *StorageProviderResponse {
-	return &StorageProviderResponse{
+func NewStorageProviderResponse(storage *storage_provider.StorageProvider) StorageProviderResponse {
+	return StorageProviderResponse{
 		ID:                 storage.ID.String(),
 		Name:               storage.Name,
 		FileSystem:         string(storage.FileSystem),
@@ -30,10 +30,10 @@ func NewStorageProviderResponse(storage *storage_provider.StorageProvider) *Stor
 	}
 }
 
-func NewStorageProviderResponseList(storage []*storage_provider.StorageProvider) []*StorageProviderResponse {
-	var response []*StorageProviderResponse
-	for _, s := range storage {
-		response = append(response, NewStorageProviderResponse(s))
+func NewStorageProviderResponseList(storage []*storage_provider.StorageProvider) []StorageProviderResponse {
+	response := make([]StorageProviderResponse, len(storage))
+	for i, s := range storage {
+		response[i] = NewStorageProviderResponse(s)
 	}
 	return response
 }
