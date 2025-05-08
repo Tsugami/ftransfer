@@ -6,19 +6,15 @@ import (
 )
 
 func SetupRoutes(
-	router *gin.Engine,
+	router *gin.RouterGroup,
 	// transferService transfer.TransferService,
 	storageProviderService *storage_provider.StorageProviderService,
-) *gin.Engine {
-
+) {
 	handler := &Handler{
 		storageProviderService: storageProviderService,
 	}
 
-	v1 := router.Group("/api/v1")
-	// Define the routes
-
-	sp_group := v1.Group("/storage-providers")
+	sp_group := router.Group("/storage-providers")
 	{
 		sp_group.POST("", handler.CreateStorageProvider)
 		sp_group.GET("", handler.ListStorageProviders)
@@ -30,6 +26,4 @@ func SetupRoutes(
 	// rg.GET("/transfers", listTransfers)
 	// rg.GET("/transfers/:id", getTransfer)
 	// rg.PUT("/transfers/:id", updateTransfer)
-
-	return router
 }

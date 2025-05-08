@@ -1,0 +1,71 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ftransfer:prod
+    container_name: ftransfer-prod
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - TZ=America/Sao_Paulo
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=ftransfer
+      - DB_PASSWORD=ftransfer_prod_password
+      - DB_NAME=ftransfer
+      - DATABASE_URL=postgres://ftransfer:ftransfer_prod_password@postgres:5432/ftransfer?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+    networks:
+      - ftransfer-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  postgres:
+    image: postgres:17.4-bullseye
+    container_name: ftransfer-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=ftransfer
+      - POSTGRES_PASSWORD=ftransfer_prod_password
+      - POSTGRES_DB=ftransfer
+      - TZ=America/Sao_Paulo
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ftransfer-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "ftransfer", "-d", "ftransfer"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+networks:
+  ftransfer-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

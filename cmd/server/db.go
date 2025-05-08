@@ -2,6 +2,8 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -43,7 +45,15 @@ func MigrateDropDB(db *sql.DB) error {
 
 func OpenDB() (*sql.DB, error) {
 	// Open a connection to the database
-	db, err := sql.Open("postgres", "postgres://user:pass@localhost:5432/ftransfer?sslmode=disable")
+
+	DATABASE_URL := os.Getenv("DATABASE_URL")
+	if DATABASE_URL == "" {
+		DATABASE_URL = "postgres://user:pass@localhost:5432/ftransfer?sslmode=disable"
+	}
+
+	fmt.Println("Try to connect to the database with the following URL:", DATABASE_URL)
+
+	db, err := sql.Open("postgres", DATABASE_URL)
 
 	if err != nil {
 		return nil, err
