@@ -66,7 +66,7 @@ func (r *StorageProviderRepository) Create(ctx context.Context, storageProvider 
 }
 
 func (r *StorageProviderRepository) List(ctx context.Context) ([]*storage_provider.StorageProvider, error) {
-	query := `SELECT * FROM storage_providers`
+	query := `SELECT id, name, file_system, protocol_connection FROM storage_providers`
 	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
@@ -98,7 +98,7 @@ func (r *StorageProviderRepository) List(ctx context.Context) ([]*storage_provid
 }
 
 func (r *StorageProviderRepository) GetByID(ctx context.Context, id storage_provider.ID) (*storage_provider.StorageProvider, error) {
-	query := `SELECT * FROM storage_providers WHERE id = $1`
+	query := `SELECT id, name, file_system, protocol_connection FROM storage_providers WHERE id = $1`
 	var storageProvider storage_provider.StorageProvider
 	var protocolConnectionJsonb ProtocolConnectionJsonb
 

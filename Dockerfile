@@ -47,8 +47,10 @@ COPY --from=backend-builder /app/ftransfer .
 
 # Copiar build do frontend para o diretório public
 COPY --from=frontend-builder /app/frontend/dist ./public
+COPY ./migrations ./migrations
 
 ENV PUBLIC_DIR=/app/public
+ENV MIGRATION_DIR=/app/migrations
 # Expor porta
 EXPOSE 8080
 

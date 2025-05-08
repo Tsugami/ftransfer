@@ -37,7 +37,7 @@ services:
 
   postgres:
     image: postgres:17.4-bullseye
-    container_name: ftransfer-postgres
+    container_name: ftransfer-postgres-prod
     restart: unless-stopped
     environment:
       - POSTGRES_USER=ftransfer
