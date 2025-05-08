@@ -56,7 +56,7 @@ docker_dev:
 	docker compose -f docker-compose.dev.yml up -d
 
 docker_dev_down:
-	docker compose -f docker-compose.dev.yml down
+	docker compose -f docker-compose.dev.yml down -v
 
 docker_dev_logs:
 	docker compose -f docker-compose.dev.yml logs -f

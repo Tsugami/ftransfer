@@ -79,7 +79,7 @@ func (h *Handler) UpdateStorageProvider(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.Status(http.StatusNoContent)
 }
 
 func (h *Handler) DeleteStorageProvider(c *gin.Context) {

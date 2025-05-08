@@ -1,5 +1,7 @@
-import type { DataProvider } from 'react-admin';
+import type { DataProvider, UpdateResult, RaRecord } from 'react-admin';
 import { httpClient } from './httpClient';
+
+
 
 const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8080/api/v1';
 
@@ -47,14 +49,11 @@ export const dataProvider: DataProvider = {
   },
 
   update: async (resource, params) => {
-    console.log('updating', params);
-    const { data } = await httpClient(`${apiUrl}/${resource}/${params.id}`, {
+    await httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: 'PUT',
-      body: JSON.stringify(params.data),
+      body: params.data ? JSON.stringify(params.data) : undefined,
     });
-    return {
-      data,
-    };
+    return { data: { id: params.id } as any };
   },
 
   updateMany: async (_resource, _params) => {

@@ -22,16 +22,17 @@ export const httpClient = async (url: string, options: RequestOptions = {}): Pro
     },
   });
 
+
+  const json = response.status === 204 ? {} : await response?.json() ?? {};
   if (!response.ok) {
-    const error = (await response?.json?.())?.error ?? response?.statusText;
+    const error = json?.error ?? response?.statusText;
 
     throw new Error(`Error! status: ${error}`);
   }
 
-  const json = await response.json();
 
   return {
-    data: json.data || json,
-    total: json.total,
+    data: json?.data || json,
+    total: json?.total,
   };
 }; 
