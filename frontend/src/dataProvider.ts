@@ -1,10 +1,10 @@
 import type { DataProvider } from 'react-admin';
 import { httpClient } from './httpClient';
 
-const apiUrl = 'http://localhost:8080/api/v1';
+const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8080/api/v1';
 
 export const dataProvider: DataProvider = {
-  getList: async (resource, params) => {
+  getList: async (resource, _params) => {
     const { data, total } = await httpClient(`${apiUrl}/${resource}`);
     return {
       data,
