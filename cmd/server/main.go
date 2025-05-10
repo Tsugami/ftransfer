@@ -18,7 +18,11 @@ func main() {
 		log.Fatalf("Failed to open database: %v", err)
 	}
 
-	var storageProviderRepo storage_provider.StorageProviderRepository = repositories.NewStorageProviderRepository(db)
+	defer db.Close()
+
+	conn := db.GetDB()
+
+	var storageProviderRepo storage_provider.StorageProviderRepository = repositories.NewStorageProviderRepository(conn)
 
 	// Initialize services
 	storageProviderService := storage_provider.NewService(storageProviderRepo)
