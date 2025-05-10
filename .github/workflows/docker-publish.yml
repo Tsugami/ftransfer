@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/ftransfer
+  IMAGE_NAME: tsugami/ftransfer
 
 jobs:
   build-and-push:
