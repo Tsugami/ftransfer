@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/Tsugami/ftransfer/internal/events"
 	"github.com/Tsugami/ftransfer/internal/storage_provider"
 	"github.com/Tsugami/ftransfer/internal/storage_provider_client"
 	"github.com/Tsugami/ftransfer/internal/transfer"
@@ -26,7 +27,9 @@ func main() {
 
 	var storageProviderRepo storage_provider.StorageProviderRepository = repositories.NewStorageProviderRepository(conn)
 	var transferRepo transfer.TransferRepository = repositories.NewTransferRepository(conn)
-	var storageProviderClientService storage_provider_client.StorageProviderClientProviderService = *storage_provider_client.NewStorageProviderClientProviderService(storageProviderRepo, transferRepo)
+	var eventRepo events.EventRepository = repositories.NewEventRepository(conn)
+
+	var storageProviderClientService storage_provider_client.StorageProviderClientProviderService = *storage_provider_client.NewStorageProviderClientProviderService(storageProviderRepo, transferRepo, eventRepo)
 
 	cronJob := NewCronJob(&storageProviderClientService)
 	go cronJob.Run()
@@ -34,8 +37,13 @@ func main() {
 	// Initialize services
 	storageProviderService := storage_provider.NewService(storageProviderRepo)
 	transferService := transfer.NewService(transferRepo)
+	eventService := events.NewEventService(eventRepo)
 
-	handler := NewHandler(storageProviderService, transferService)
+	handler := NewHandler(
+		transferService,
+		storageProviderService,
+		eventService,
+	)
 	server := gin.Default()
 
 	// Initialize middleware

@@ -1,23 +1,27 @@
 package main
 
 import (
+	"github.com/Tsugami/ftransfer/internal/events"
 	"github.com/Tsugami/ftransfer/internal/storage_provider"
 	"github.com/Tsugami/ftransfer/internal/transfer"
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-	storageProviderService *storage_provider.StorageProviderService
 	transferService        *transfer.TransferService
+	storageProviderService *storage_provider.StorageProviderService
+	eventService           *events.EventService
 }
 
 func NewHandler(
-	storageProviderService *storage_provider.StorageProviderService,
 	transferService *transfer.TransferService,
+	storageProviderService *storage_provider.StorageProviderService,
+	eventService *events.EventService,
 ) *Handler {
 	return &Handler{
-		storageProviderService: storageProviderService,
 		transferService:        transferService,
+		storageProviderService: storageProviderService,
+		eventService:           eventService,
 	}
 }
 
@@ -42,5 +46,10 @@ func (handler *Handler) SetupRoutes(
 		rg.GET("/:id", handler.GetTransfer)
 		rg.PUT("/:id", handler.UpdateTransfer)
 		rg.DELETE("/:id", handler.DeleteTransfer)
+	}
+
+	eg := router.Group("/events")
+	{
+		eg.GET("", handler.ListEvents)
 	}
 }

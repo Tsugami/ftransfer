@@ -6,8 +6,13 @@ import { httpClient } from './httpClient';
 const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8080/api/v1';
 
 export const dataProvider: DataProvider = {
-  getList: async (resource, _params) => {
-    const { data, total } = await httpClient(`${apiUrl}/${resource}`);
+  getList: async (resource, params) => {
+
+    const { data, total } = await httpClient(`${apiUrl}/${resource}`, {
+      params: {
+        ...params.filter,
+      }
+    });
     return {
       data,
       total,

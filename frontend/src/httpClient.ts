@@ -1,6 +1,7 @@
 interface RequestOptions {
   method?: string;
   body?: string;
+  params?: Record<string, string>;
   headers?: Record<string, string>;
 }
 
@@ -14,7 +15,9 @@ export const httpClient = async (url: string, options: RequestOptions = {}): Pro
     'Content-Type': 'application/json',
   };
 
-  const response = await fetch(url, {
+
+  const search = options.params ? `?${new URLSearchParams(options.params).toString()}` : '';
+  const response = await fetch(`${url}${search}`, {
     ...options,
     headers: {
       ...defaultHeaders,

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"path"
 
+	"github.com/Tsugami/ftransfer/internal/events"
 	"github.com/Tsugami/ftransfer/internal/storage_provider"
 	"github.com/Tsugami/ftransfer/internal/transfer"
 )
@@ -13,14 +14,16 @@ type StorageProviderClientProviderService struct {
 	storageProviderRepository    storage_provider.StorageProviderRepository
 	transferRepository           transfer.TransferRepository
 	storageProviderClientFactory StorageProviderClientFactory
+	eventRepository              events.EventRepository
 }
 
 func NewStorageProviderClientProviderService(
 	storageProviderRepository storage_provider.StorageProviderRepository,
 	transferRepository transfer.TransferRepository,
+	eventRepository events.EventRepository,
 ) *StorageProviderClientProviderService {
 	storageProviderClientFactory := NewStorageProviderClientFactory()
-	return &StorageProviderClientProviderService{storageProviderRepository, transferRepository, *storageProviderClientFactory}
+	return &StorageProviderClientProviderService{storageProviderRepository, transferRepository, *storageProviderClientFactory, eventRepository}
 }
 
 type ErrorList = []string
@@ -45,6 +48,7 @@ func (s *StorageProviderClientProviderService) TransferFiles(ctx context.Context
 }
 
 func (s *StorageProviderClientProviderService) transferFiles(ctx context.Context, transferId transfer.ID) (ErrorList, error) {
+	logger := events.NewEventLogger(transferId.String(), s.eventRepository)
 
 	transfer, err := s.transferRepository.GetByID(ctx, transferId)
 	if err != nil {
@@ -76,13 +80,13 @@ func (s *StorageProviderClientProviderService) transferFiles(ctx context.Context
 		return nil, err
 	}
 
-	fmt.Printf("%s found %d files\n", transfer.SourceDir.String(), len(sourceFiles))
+	logger.Info(ctx, fmt.Sprintf("%s found %d files", transfer.SourceDir.String(), len(sourceFiles)))
 	errorFiles := []string{}
 	for _, sourceFile := range sourceFiles {
 		sourcePath := path.Join(transfer.SourceDir.String(), sourceFile)
 		sourceFileReader, err := sourceStorageProviderClient.ReadFile(ctx, sourcePath)
 		if err != nil {
-			fmt.Printf("error reading file %s: %v\n", sourcePath, err)
+			logger.Error(ctx, fmt.Sprintf("error reading file %s: %v", sourcePath, err))
 			errorFiles = append(errorFiles, sourceFile)
 			continue
 		}
@@ -90,7 +94,7 @@ func (s *StorageProviderClientProviderService) transferFiles(ctx context.Context
 		destinationPath := path.Join(transfer.DestinationDir.String(), sourceFile)
 		err = destinationStorageProviderClient.WriteFile(ctx, destinationPath, sourceFileReader)
 		if err != nil {
-			fmt.Printf("error writing file %s: %v\n", destinationPath, err)
+			logger.Error(ctx, fmt.Sprintf("error writing file %s: %v", destinationPath, err))
 			errorFiles = append(errorFiles, sourceFile)
 			continue
 		}
@@ -98,7 +102,7 @@ func (s *StorageProviderClientProviderService) transferFiles(ctx context.Context
 		// post
 		err = sourceStorageProviderClient.MakeDir(ctx, transfer.PostTransferSourceDir.String())
 		if err != nil {
-			fmt.Printf("error making directory %s: %v\n", transfer.PostTransferSourceDir.String(), err)
+			logger.Error(ctx, fmt.Sprintf("error making directory %s: %v", transfer.PostTransferSourceDir.String(), err))
 			errorFiles = append(errorFiles, sourceFile)
 			continue
 		}
@@ -106,10 +110,15 @@ func (s *StorageProviderClientProviderService) transferFiles(ctx context.Context
 		postTransferSourcePath := path.Join(transfer.PostTransferSourceDir.String(), sourceFile)
 		err = sourceStorageProviderClient.MoveFile(ctx, sourcePath, postTransferSourcePath)
 		if err != nil {
-			fmt.Printf("error moving file from %s to %s: %v\n", sourcePath, postTransferSourcePath, err)
+			logger.Error(ctx, fmt.Sprintf("error moving file from %s to %s: %v", sourcePath, postTransferSourcePath, err))
 			errorFiles = append(errorFiles, sourceFile)
 			continue
 		}
+	}
+
+	err = logger.Flush(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return errorFiles, nil
