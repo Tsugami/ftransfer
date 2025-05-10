@@ -19,18 +19,9 @@ FTransfer is a robust file transfer system designed to automate and manage file 
 - Transfer history and logs
 - Status monitoring
 
-## Quick Start
+## Installation
 
-### Prerequisites
-
-- Go 1.23 or higher
-- Node.js 20 or higher
-- PostgreSQL 15 or higher
-- Docker (optional)
-
-### Installation
-
-#### Using Docker
+### Using Docker
 
 The easiest way to run FTransfer is using our pre-built Docker image:
 
@@ -44,7 +35,7 @@ docker run -p 8080:8080 \
   ghcr.io/tsugami/ftransfer:latest
 ```
 
-#### Using Releases
+### Using Releases
 
 The easiest way to get started is to download the latest release from our [releases page](https://github.com/Tsugami/ftransfer/releases).
 
