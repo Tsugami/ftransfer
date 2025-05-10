@@ -4,20 +4,20 @@ FTransfer is a robust file transfer system designed to automate and manage file 
 
 ## Features
 
-- **Multi-Protocol Support**
-  - FTP/SFTP file transfers
-  - S3 Protocol
-  - Extensible architecture for new protocols
+### Multi-Protocol Support
+- FTP/SFTP file transfers
+- S3 Protocol
+- Extensible architecture for new protocols
 
-- **Automated Transfers**
-  - Scheduled transfers
-  - Real-time monitoring
-  - Error handling and retry mechanisms
+### Automated Transfers
+- Scheduled transfers
+- Real-time monitoring
+- Error handling and retry mechanisms
 
-- **Centralized Management**
-  - Web-based dashboard
-  - Transfer history and logs
-  - Status monitoring
+### Centralized Management
+- Web-based dashboard
+- Transfer history and logs
+- Status monitoring
 
 ## Quick Start
 
@@ -89,22 +89,6 @@ ftransfer/
 ├── migrations/           # Database migrations
 └── docs/                # Documentation
 ```
-
-### Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-For support, please open an issue in the GitHub repository or contact the maintainers.
 
 ## Acknowledgments
 
