@@ -3,6 +3,7 @@ package error_middleware
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,6 +27,7 @@ func ErrorHandler(errMap ...*errorMapping) gin.HandlerFunc {
 			}
 		}
 
+		fmt.Printf("error: %v\n", lastErr.Err)
 		context.JSON(500, gin.H{
 			"error": "Internal server error",
 		})

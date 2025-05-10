@@ -5,7 +5,6 @@ import {
   DateField,
   ReferenceInput,
   SelectInput,
-  useGetList,
 } from 'react-admin';
 import { Box, Paper, Typography } from '@mui/material';
 

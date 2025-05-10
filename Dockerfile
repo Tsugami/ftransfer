@@ -13,11 +13,13 @@ RUN pnpm install --frozen-lockfile
 # Copiar código fonte
 COPY frontend/ ./
 
+ENV VITE_API_URL=/api/v1
+
 # Build do frontend
 RUN pnpm run build
 
 # Build Backend
-FROM golang:1.24-alpine AS backend-builder
+FROM golang:1.23-alpine AS backend-builder
 
 WORKDIR /app
 
@@ -32,7 +34,7 @@ RUN go mod download
 COPY . .
 
 # Build do backend
-RUN CGO_ENABLED=0 GOOS=linux go build -o ftransfer ./cmd/server
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o ftransfer ./cmd/server
 
 # Imagem Final
 FROM alpine:3.19
@@ -49,6 +51,7 @@ COPY --from=backend-builder /app/ftransfer .
 COPY --from=frontend-builder /app/frontend/dist ./public
 COPY ./migrations ./migrations
 
+ENV GIN_MODE=release
 ENV PUBLIC_DIR=/app/public
 ENV MIGRATION_DIR=/app/migrations
 # Expor porta

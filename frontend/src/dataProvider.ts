@@ -1,4 +1,4 @@
-import type { DataProvider, UpdateResult, RaRecord } from 'react-admin';
+import type { DataProvider } from 'react-admin';
 import { httpClient } from './httpClient';
 
 
@@ -13,6 +13,7 @@ export const dataProvider: DataProvider = {
         ...params.filter,
       }
     });
+    
     return {
       data,
       total,

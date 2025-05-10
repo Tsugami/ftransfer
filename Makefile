@@ -71,17 +71,17 @@ dev:
 pgsql:
 	docker exec -it ftransfer_postgres psql -U $(DB_USER) -d $(DB_NAME)
 
-test_dockerfile_build:
+dc_prod_build:
 	docker compose -f docker-compose.prod.yaml build
 
-test_dockerfile_up:
+dc_prod_up:
 	docker compose -f docker-compose.prod.yaml up
 
-test_dockerfile_down:
+dc_prod_down:
 	docker compose -f docker-compose.prod.yaml down
 
-test_dockerfile_psql:
+dc_prod_psql:
 	docker exec -it ftransfer-postgres-prod psql -U ftransfer -d ftransfer
 
-clean_docker_volumes: test_dockerfile_down
+dc_prod_clean: dc_prod_down
 	docker compose -f docker-compose.prod.yaml down -v
