@@ -52,6 +52,11 @@ func (s *StorageProviderClientProviderService) TransferFiles(ctx context.Context
 
 func (s *StorageProviderClientProviderService) transferFiles(ctx context.Context, transferId transfer.ID) (ErrorList, error) {
 	logger := events.NewEventLogger(transferId.String(), s.eventRepository)
+	defer func() {
+		if err := logger.Flush(ctx); err != nil {
+			fmt.Printf("error flushing logs for transfer %s: %v\n", transferId, err)
+		}
+	}()
 
 	transfer, err := s.transferRepository.GetByID(ctx, transferId)
 	if err != nil {
@@ -141,11 +146,6 @@ func (s *StorageProviderClientProviderService) transferFiles(ctx context.Context
 			errorFiles = append(errorFiles, sourceFile)
 			continue
 		}
-	}
-
-	err = logger.Flush(ctx)
-	if err != nil {
-		return nil, err
 	}
 
 	return errorFiles, nil
