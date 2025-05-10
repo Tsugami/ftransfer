@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/Tsugami/ftransfer/internal/storage_provider"
+	"github.com/Tsugami/ftransfer/internal/storage_provider_client"
 	"github.com/Tsugami/ftransfer/internal/transfer"
 	"github.com/Tsugami/ftransfer/repositories"
 	"github.com/gin-contrib/static"
@@ -25,6 +26,11 @@ func main() {
 
 	var storageProviderRepo storage_provider.StorageProviderRepository = repositories.NewStorageProviderRepository(conn)
 	var transferRepo transfer.TransferRepository = repositories.NewTransferRepository(conn)
+	var storageProviderClientService storage_provider_client.StorageProviderClientProviderService = *storage_provider_client.NewStorageProviderClientProviderService(storageProviderRepo, transferRepo)
+
+	cronJob := NewCronJob(&storageProviderClientService)
+	go cronJob.Run()
+
 	// Initialize services
 	storageProviderService := storage_provider.NewService(storageProviderRepo)
 	transferService := transfer.NewService(transferRepo)
