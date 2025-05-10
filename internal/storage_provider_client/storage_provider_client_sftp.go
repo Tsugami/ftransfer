@@ -6,6 +6,7 @@ import (
 	"io"
 	"net"
 	"strconv"
+	"time"
 
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
@@ -29,6 +30,7 @@ func NewStorageProviderClientSFTP(connection *StorageProviderClientConnection) (
 			ssh.Password(connection.Password),
 		},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+		Timeout:         1 * time.Second,
 	}
 
 	addr := net.JoinHostPort(connection.Host, strconv.Itoa(connection.Port))
@@ -47,6 +49,7 @@ func NewStorageProviderClientSFTP(connection *StorageProviderClientConnection) (
 }
 
 func (s *StorageProviderClientSFTP) ListFiles(ctx context.Context, path string) ([]string, error) {
+	// List only top 30 files in the directory
 	files, err := s.client.ReadDir(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to list files %s: %w", path, err)

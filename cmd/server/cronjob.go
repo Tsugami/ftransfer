@@ -19,8 +19,8 @@ func NewCronJob(storageProviderClientService *storage_provider_client.StoragePro
 }
 
 func (c *CronJob) Run() {
-	log.Println("CronJob started")
 	for {
+		log.Println("CronJob started")
 		errorFiles, err := c.storageProviderClientService.TransferFiles(context.Background())
 		if err != nil {
 			log.Printf("failed to transfer files: %v", err)
@@ -28,6 +28,6 @@ func (c *CronJob) Run() {
 
 		log.Printf("transferred %d files with errors: %v", len(errorFiles), errorFiles)
 
-		time.Sleep(1 * time.Second)
+		time.Sleep(1 * time.Minute)
 	}
 }
