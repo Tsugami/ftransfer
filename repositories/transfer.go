@@ -5,6 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/Tsugami/ftransfer/internal/transfer"
+	"github.com/google/uuid"
 )
 
 type TransferRepository struct {
@@ -15,10 +16,30 @@ func NewTransferRepository(db *sql.DB) *TransferRepository {
 	return &TransferRepository{db: db}
 }
 
-func (r *TransferRepository) Create(ctx context.Context, transfer *transfer.Transfer) error {
-	query := `INSERT INTO transfers (source_dir, destination_dir, post_transfer_source_dir, source_storage_provider_id, destination_storage_provider_id) VALUES ($1, $2, $3, $4, $5)`
-	_, err := r.db.ExecContext(ctx, query, transfer.SourceDir, transfer.DestinationDir, transfer.PostTransferSourceDir, transfer.SourceStorageProviderID.String(), transfer.DestinationStorageProviderID.String())
-	return err
+func (r *TransferRepository) Create(ctx context.Context, input *transfer.Transfer) (*transfer.ID, error) {
+	id := transfer.NewID(uuid.New().String())
+
+	query := `
+		INSERT INTO transfers
+		(id, source_dir, destination_dir, post_transfer_source_dir, source_storage_provider_id, destination_storage_provider_id)
+		VALUES ($1, $2, $3, $4, $5, $6)
+	`
+	_, err := r.db.ExecContext(
+		ctx,
+		query,
+		id,
+		input.SourceDir,
+		input.DestinationDir,
+		input.PostTransferSourceDir,
+		input.SourceStorageProviderID.String(),
+		input.DestinationStorageProviderID.String(),
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &id, nil
 }
 
 func (r *TransferRepository) List(ctx context.Context) ([]*transfer.Transfer, error) {

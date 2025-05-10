@@ -8,7 +8,7 @@ type TransferReader interface {
 }
 
 type TransferWriter interface {
-	Create(ctx context.Context, transfer *Transfer) error
+	Create(ctx context.Context, transfer *Transfer) (*ID, error)
 	Update(ctx context.Context, transfer *Transfer) error
 	Delete(ctx context.Context, id ID) error
 }

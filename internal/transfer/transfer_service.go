@@ -28,10 +28,12 @@ func (s *TransferService) Create(ctx context.Context, sourceDir Directory, desti
 		return nil, err
 	}
 
-	err := s.Repo.Create(ctx, &transfer)
+	id, err := s.Repo.Create(ctx, &transfer)
 	if err != nil {
 		return nil, err
 	}
+
+	transfer.ID = *id
 
 	return &transfer, nil
 }
