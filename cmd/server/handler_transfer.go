@@ -52,7 +52,7 @@ func NewTransferResponseList(transfers []*transfer.Transfer) []TransferResponse 
 	return response
 }
 
-func (s *Handler) createTransfer(c *gin.Context) {
+func (s *Handler) CreateTransfer(c *gin.Context) {
 	var input CreateTransferRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

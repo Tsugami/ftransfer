@@ -1,0 +1,2 @@
+DROP TABLE storage_providers;
+DROP TYPE storage_provider_file_system;

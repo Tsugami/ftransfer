@@ -32,7 +32,7 @@ migrate-up:
 
 # Run database migrations down
 migrate-down:
-	migrate -path $(MIGRATION_DIR) -database "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable" down
+	migrate -path $(MIGRATION_DIR) -database "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable" down -all
 
 migrate-create:
 	migrate create -ext sql -dir $(MIGRATION_DIR) -seq $(name)

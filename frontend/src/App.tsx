@@ -1,20 +1,28 @@
 import { Admin, Resource } from 'react-admin';
-import { StorageProviderList, StorageProviderCreate, StorageProviderEdit } from './components/storage-providers';
+import { TransferList, TransferEdit, TransferCreate, TransferShow } from './components/transfers';
+import { StorageProviderList, StorageProviderEdit, StorageProviderCreate } from './components/storage-providers';
 import { dataProvider } from './dataProvider';
 import StorageIcon from '@mui/icons-material/Storage';
 
-function App() {
+const App = () => {
   return (
     <Admin dataProvider={dataProvider}>
       <Resource
+        name="transfers"
+        list={TransferList}
+        edit={TransferEdit}
+        create={TransferCreate}
+        show={TransferShow}
+      />
+      <Resource
         name="storage-providers"
         list={StorageProviderList}
-        create={StorageProviderCreate}
         edit={StorageProviderEdit}
+        create={StorageProviderCreate}
         icon={StorageIcon}
       />
     </Admin>
   );
-}
+};
 
 export default App;

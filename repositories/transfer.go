@@ -17,12 +17,12 @@ func NewTransferRepository(db *sql.DB) *TransferRepository {
 
 func (r *TransferRepository) Create(ctx context.Context, transfer *transfer.Transfer) error {
 	query := `INSERT INTO transfers (source_dir, destination_dir, post_transfer_source_dir, source_storage_provider_id, destination_storage_provider_id) VALUES ($1, $2, $3, $4, $5)`
-	_, err := r.db.ExecContext(ctx, query, transfer.SourceDir, transfer.DestinationDir, transfer.PostTransferSourceDir, transfer.SourceStorageProviderID, transfer.DestinationStorageProviderID)
+	_, err := r.db.ExecContext(ctx, query, transfer.SourceDir, transfer.DestinationDir, transfer.PostTransferSourceDir, transfer.SourceStorageProviderID.String(), transfer.DestinationStorageProviderID.String())
 	return err
 }
 
 func (r *TransferRepository) List(ctx context.Context) ([]*transfer.Transfer, error) {
-	query := `SELECT * FROM transfers`
+	query := `SELECT id, source_dir, destination_dir, post_transfer_source_dir, source_storage_provider_id, destination_storage_provider_id FROM transfers`
 	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (r *TransferRepository) List(ctx context.Context) ([]*transfer.Transfer, er
 }
 
 func (r *TransferRepository) GetByID(ctx context.Context, id transfer.ID) (*transfer.Transfer, error) {
-	query := `SELECT * FROM transfers WHERE id = $1`
+	query := `SELECT id, source_dir, destination_dir, post_transfer_source_dir, source_storage_provider_id, destination_storage_provider_id FROM transfers WHERE id = $1`
 	var transfer transfer.Transfer
 	if err := r.db.QueryRowContext(ctx, query, id).Scan(&transfer.ID, &transfer.SourceDir, &transfer.DestinationDir, &transfer.PostTransferSourceDir, &transfer.SourceStorageProviderID, &transfer.DestinationStorageProviderID); err != nil {
 		return nil, err

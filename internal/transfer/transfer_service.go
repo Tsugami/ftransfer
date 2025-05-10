@@ -39,7 +39,7 @@ func (s *TransferService) Create(ctx context.Context, sourceDir Directory, desti
 func (s *TransferService) List(ctx context.Context) ([]*Transfer, error) {
 	all, err := s.Repo.List(ctx)
 	if err != nil {
-		return nil, ErrListTransfers
+		return nil, err
 	}
 
 	return all, nil

@@ -1,17 +1,13 @@
 package transfer
 
-import (
-	"strings"
-)
-
-type Directory []string
+type Directory string
 
 func (d *Directory) String() string {
-	return strings.Join(*d, "/")
+	return string(*d)
 }
 
 func NewDirectory(dir string) Directory {
-	return Directory(strings.Split(dir, "/"))
+	return Directory(dir)
 }
 
 func (d *Directory) IsValid() bool {

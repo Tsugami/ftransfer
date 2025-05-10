@@ -38,6 +38,7 @@ func (handler *Handler) SetupRoutes(
 	rg := router.Group("/transfers")
 	{
 		rg.GET("", handler.ListTransfers)
+		rg.POST("", handler.CreateTransfer)
 		rg.GET("/:id", handler.GetTransfer)
 		rg.PUT("/:id", handler.UpdateTransfer)
 		rg.DELETE("/:id", handler.DeleteTransfer)
