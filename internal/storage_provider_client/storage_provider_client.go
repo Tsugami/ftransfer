@@ -10,4 +10,5 @@ type StorageProviderClient interface {
 	ReadFile(ctx context.Context, path string) (io.ReadCloser, error)
 	WriteFile(ctx context.Context, path string, data io.Reader) error
 	MoveFile(ctx context.Context, sourcePath string, destinationPath string) error
+	MakeDir(ctx context.Context, path string) error
 }

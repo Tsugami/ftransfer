@@ -53,21 +53,24 @@ func (s *TransferService) Get(ctx context.Context, id ID) (*Transfer, error) {
 }
 
 func (s *TransferService) Update(ctx context.Context, id ID, sourceDir Directory, destinationDir Directory, postTransferSourceDir Directory, sourceStorageProviderID storage_provider.ID, destinationStorageProviderID storage_provider.ID) error {
-	transfer := Transfer{
-		SourceDir:                    sourceDir,
-		DestinationDir:               destinationDir,
-		PostTransferSourceDir:        postTransferSourceDir,
-		SourceStorageProviderID:      sourceStorageProviderID,
-		DestinationStorageProviderID: destinationStorageProviderID,
+	transfer, err := s.Repo.GetByID(ctx, id)
+	if err != nil {
+		return ErrGetTransfer
 	}
+
+	transfer.SourceDir = sourceDir
+	transfer.DestinationDir = destinationDir
+	transfer.PostTransferSourceDir = postTransferSourceDir
+	transfer.SourceStorageProviderID = sourceStorageProviderID
+	transfer.DestinationStorageProviderID = destinationStorageProviderID
 
 	if err := transfer.Validate(); err != nil {
 		return err
 	}
 
-	err := s.Repo.Update(ctx, &transfer)
+	err = s.Repo.Update(ctx, transfer)
 	if err != nil {
-		return ErrUpdateTransfer
+		return err
 	}
 
 	return nil

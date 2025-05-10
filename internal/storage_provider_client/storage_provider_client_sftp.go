@@ -49,11 +49,16 @@ func NewStorageProviderClientSFTP(connection *StorageProviderClientConnection) (
 func (s *StorageProviderClientSFTP) ListFiles(ctx context.Context, path string) ([]string, error) {
 	files, err := s.client.ReadDir(path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to list files: %w", err)
+		return nil, fmt.Errorf("failed to list files %s: %w", path, err)
 	}
 
 	var fileNames []string
 	for _, file := range files {
+		if file.IsDir() {
+			fmt.Printf("skipping directory %s\n", file.Name())
+			continue
+		}
+
 		fileNames = append(fileNames, file.Name())
 	}
 
@@ -87,6 +92,14 @@ func (s *StorageProviderClientSFTP) MoveFile(ctx context.Context, sourcePath str
 	err := s.client.Rename(sourcePath, destinationPath)
 	if err != nil {
 		return fmt.Errorf("failed to move file: %w", err)
+	}
+	return nil
+}
+
+func (s *StorageProviderClientSFTP) MakeDir(ctx context.Context, path string) error {
+	err := s.client.MkdirAll(path)
+	if err != nil {
+		return fmt.Errorf("failed to make directory: %w", err)
 	}
 	return nil
 }

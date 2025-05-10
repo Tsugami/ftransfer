@@ -3,6 +3,7 @@ package storage_provider_client
 import (
 	"context"
 	"fmt"
+	"path"
 
 	"github.com/Tsugami/ftransfer/internal/storage_provider"
 	"github.com/Tsugami/ftransfer/internal/transfer"
@@ -75,16 +76,37 @@ func (s *StorageProviderClientProviderService) transferFiles(ctx context.Context
 		return nil, err
 	}
 
+	fmt.Printf("%s found %d files\n", transfer.SourceDir.String(), len(sourceFiles))
 	errorFiles := []string{}
 	for _, sourceFile := range sourceFiles {
-		sourceFileReader, err := sourceStorageProviderClient.ReadFile(ctx, sourceFile)
+		sourcePath := path.Join(transfer.SourceDir.String(), sourceFile)
+		sourceFileReader, err := sourceStorageProviderClient.ReadFile(ctx, sourcePath)
 		if err != nil {
+			fmt.Printf("error reading file %s: %v\n", sourcePath, err)
 			errorFiles = append(errorFiles, sourceFile)
 			continue
 		}
 
-		err = destinationStorageProviderClient.WriteFile(ctx, transfer.DestinationDir.String(), sourceFileReader)
+		destinationPath := path.Join(transfer.DestinationDir.String(), sourceFile)
+		err = destinationStorageProviderClient.WriteFile(ctx, destinationPath, sourceFileReader)
 		if err != nil {
+			fmt.Printf("error writing file %s: %v\n", destinationPath, err)
+			errorFiles = append(errorFiles, sourceFile)
+			continue
+		}
+
+		// post
+		err = sourceStorageProviderClient.MakeDir(ctx, transfer.PostTransferSourceDir.String())
+		if err != nil {
+			fmt.Printf("error making directory %s: %v\n", transfer.PostTransferSourceDir.String(), err)
+			errorFiles = append(errorFiles, sourceFile)
+			continue
+		}
+
+		postTransferSourcePath := path.Join(transfer.PostTransferSourceDir.String(), sourceFile)
+		err = sourceStorageProviderClient.MoveFile(ctx, sourcePath, postTransferSourcePath)
+		if err != nil {
+			fmt.Printf("error moving file from %s to %s: %v\n", sourcePath, postTransferSourcePath, err)
 			errorFiles = append(errorFiles, sourceFile)
 			continue
 		}

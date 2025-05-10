@@ -12,5 +12,19 @@ services:
     volumes:
       - postgres_data_dev:/var/lib/postgresql/data
 
+  sftp1:
+    image: atmoz/sftp:latest
+    container_name: ftransfer_sftp1_dev
+    ports:
+      - '2221:22'
+    command: user1:pass1:1001:100:/home/user1/upload
+
+  sftp2:
+    image: atmoz/sftp:latest
+    container_name: ftransfer_sftp2_dev
+    ports:
+      - '2222:22'
+    command: user2:pass2:1002:100:/home/user2/upload
+
 volumes:
   postgres_data_dev:
