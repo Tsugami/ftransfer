@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/Tsugami/ftransfer/internal/storage_provider"
+	"github.com/Tsugami/ftransfer/internal/transfer"
 	"github.com/Tsugami/ftransfer/repositories"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
@@ -23,10 +24,12 @@ func main() {
 	conn := db.GetDB()
 
 	var storageProviderRepo storage_provider.StorageProviderRepository = repositories.NewStorageProviderRepository(conn)
-
+	var transferRepo transfer.TransferRepository = repositories.NewTransferRepository(conn)
 	// Initialize services
 	storageProviderService := storage_provider.NewService(storageProviderRepo)
+	transferService := transfer.NewService(transferRepo)
 
+	handler := NewHandler(storageProviderService, transferService)
 	server := gin.Default()
 
 	// Initialize middleware
@@ -41,7 +44,7 @@ func main() {
 	server.Use(static.Serve("/", static.LocalFile(PUBLIC_DIR, false)))
 
 	api := server.Group("/api/v1")
-	SetupRoutes(api, storageProviderService)
+	handler.SetupRoutes(api, storageProviderService, transferService)
 
 	// Start server
 	log.Println("Server starting on :8080")

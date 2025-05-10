@@ -2,21 +2,16 @@ package transfer
 
 import (
 	"strings"
-
-	"github.com/Tsugami/ftransfer/internal/storage_provider"
 )
 
 type Directory []string
 
-func (d *Directory) String(system storage_provider.FileSystemType) string {
-	switch system {
-	case storage_provider.FileSystemUNIX:
-		return strings.Join(*d, "/")
-	case storage_provider.FileSystemWINDOWS:
-		return strings.Join(*d, "\\")
-	}
+func (d *Directory) String() string {
+	return strings.Join(*d, "/")
+}
 
-	return ""
+func NewDirectory(dir string) Directory {
+	return Directory(strings.Split(dir, "/"))
 }
 
 func (d *Directory) IsValid() bool {
