@@ -1,115 +1,113 @@
 # FTransfer
 
-Sistema de transferência de arquivos entre diversos protocolos.
+FTransfer is a robust file transfer system designed to automate and manage file transfers between different storage systems. It provides a unified interface for handling transfers across various protocols like FTP, SFTP, and S3.
 
-## Tecnologias Utilizadas
+## Features
 
-- Backend:
-  - Go (Golang)
-  - PostgreSQL
-  - Docker
+- **Multi-Protocol Support**
+  - FTP/SFTP file transfers
+  - S3 Protocol
+  - Extensible architecture for new protocols
 
-- Frontend:
-  - React
-  - React Admin
-  - TypeScript
-  - Vite
+- **Automated Transfers**
+  - Scheduled transfers
+  - Real-time monitoring
+  - Error handling and retry mechanisms
 
-## Requisitos
+- **Centralized Management**
+  - Web-based dashboard
+  - Transfer history and logs
+  - Status monitoring
 
-- Docker e Docker Compose
-- Go 1.21 ou superior
-- Node.js 18 ou superior
+## Quick Start
 
-## Comandos Makefile
+### Prerequisites
 
-O projeto utiliza Makefile para facilitar o desenvolvimento. Aqui estão os principais comandos:
+- Go 1.23 or higher
+- Node.js 20 or higher
+- PostgreSQL 15 or higher
+- Docker (optional)
 
-### Desenvolvimento
-```bash
-make dev              # Inicia o servidor com hot-reload
-make docker_dev      # Inicia os containers de desenvolvimento
-make docker_dev_down # Para os containers de desenvolvimento
-make docker_dev_logs # Mostra os logs dos containers de desenvolvimento
-make psql_dev        # Conecta ao PostgreSQL de desenvolvimento
-```
+### Installation
 
-### Banco de Dados
-```bash
-make migrate-up      # Executa as migrações para cima
-make migrate-down    # Reverte as migrações
-make migrate-create  # Cria um novo arquivo de migração (use: make migrate-create name=nome_da_migracao)
-```
+#### Using Docker
 
-### Docker
-```bash
-make test_dockerfile_build    # Constrói a imagem Docker de produção
-make test_dockerfile_up       # Inicia os containers de produção
-make test_dockerfile_down     # Para os containers de produção
-make test_dockerfile_psql     # Conecta ao PostgreSQL de produção
-make clean_docker_volumes     # Remove todos os volumes Docker de produção
-```
-
-### Outros
-```bash
-make build           # Compila o projeto
-make run            # Executa o projeto
-make test           # Executa os testes
-make lint           # Executa o linter
-make deps           # Instala as dependências
-make dev-tools      # Instala as ferramentas de desenvolvimento (migrate, air, etc)
-make clean          # Remove arquivos de build
-```
-
-## Executando o Projeto
-
-### Desenvolvimento
-
-1. Clone o repositório:
-```bash
-git clone https://github.com/seu-usuario/ftransfer.git
-cd ftransfer
-```
-
-2. Inicie o banco de dados:
-```bash
-make docker_dev
-```
-
-4. Inicie o backend:
-```bash
-make dev
-```
-
-5. Em outro terminal, inicie o frontend:
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-### Produção
-
-Para executar em ambiente de produção:
+The easiest way to run FTransfer is using our pre-built Docker image:
 
 ```bash
-make test_dockerfile_up
+# Pull the latest image
+docker pull ghcr.io/tsugami/ftransfer:latest
+
+# Run the container
+docker run -p 8080:8080 \
+  -e DATABASE_URL="postgres://user:password@host:5432/dbname?sslmode=disable" \
+  ghcr.io/tsugami/ftransfer:latest
 ```
 
-## Estrutura do Projeto
+#### Using Releases
+
+The easiest way to get started is to download the latest release from our [releases page](https://github.com/Tsugami/ftransfer/releases).
+
+1. Download the appropriate release for your system
+2. Extract the archive
+3. Configure your environment variables
+4. Run the application
+
+## API Documentation
+
+The API is RESTful and follows standard HTTP conventions. For detailed API documentation, see the [API Documentation](docs/api.md).
+
+### Example API Usage
+
+```bash
+# List storage providers
+curl -X GET "http://localhost:8080/api/v1/storage-providers"
+
+# Create a new transfer
+curl -X POST "http://localhost:8080/api/v1/transfers" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "source_storage_provider_id": "provider-id",
+    "destination_storage_provider_id": "provider-id",
+    "source_dir": "/source/path",
+    "destination_dir": "/destination/path"
+  }'
+```
+
+## Development
+
+### Project Structure
 
 ```
-.
-├── cmd/               # Ponto de entrada da aplicação
-├── internal/         # Regras de negócio
-├── pkg/             # Código que pode ser usado por aplicações externas
-├── repositories/    # Implementações dos repositórios
-├── migrations/      # Arquivos de migração do banco de dados
-├── frontend/        # Aplicação React
-├── docs/           # Documentação do projeto
-└── public/         # Arquivos públicos
+ftransfer/
+├── cmd/                    # Application entry points
+├── internal/              # Private application code
+│   ├── storage_provider/  # Storage provider implementations
+│   ├── transfer/         # Transfer logic
+│   └── events/          # Event handling
+├── frontend/             # Web interface
+├── migrations/           # Database migrations
+└── docs/                # Documentation
 ```
 
-## Licença
+### Contributing
 
-Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes. 
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For support, please open an issue in the GitHub repository or contact the maintainers.
+
+## Acknowledgments
+
+- [Gin Web Framework](https://github.com/gin-gonic/gin) - Go web framework
+- [React Admin](https://marmelab.com/react-admin/) - Admin interface framework
+- [PostgreSQL](https://www.postgresql.org/) - Relational database
