@@ -52,13 +52,13 @@ dev-tools:
 	go install github.com/air-verse/air@latest
 
 
-docker_dev:
+dc_dev_up:
 	docker compose -f docker-compose.dev.yml up -d
 
-docker_dev_down:
+dc_dev_down:
 	docker compose -f docker-compose.dev.yml down 
 
-docker_dev_logs:
+dc_dev_logs:
 	docker compose -f docker-compose.dev.yml logs -f
 
 psql_dev:

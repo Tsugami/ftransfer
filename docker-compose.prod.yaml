@@ -3,7 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ftransfer:prod
     container_name: ftransfer-prod
     restart: unless-stopped
     ports:
@@ -11,11 +10,6 @@ services:
     environment:
       - NODE_ENV=production
       - TZ=America/Sao_Paulo
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=ftransfer
-      - DB_PASSWORD=ftransfer_prod_password
-      - DB_NAME=ftransfer
       - DATABASE_URL=postgres://ftransfer:ftransfer_prod_password@postgres:5432/ftransfer?sslmode=disable
     depends_on:
       postgres:
@@ -36,7 +30,7 @@ services:
           memory: 512M
 
   postgres:
-    image: postgres:17.4-bullseye
+    image: postgres:17
     container_name: ftransfer-postgres-prod
     restart: unless-stopped
     environment:
